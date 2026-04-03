@@ -35,7 +35,8 @@ import {
   Edit2,
   Plus,
   Trash2,
-  Save
+  Save,
+  ChevronDown
 } from 'lucide-react';
 
 const products = [
@@ -466,16 +467,25 @@ export default function App() {
               )}
 
               <div className="flex flex-wrap gap-2 mt-auto pt-6 border-t border-gray-50">
-                {product.actions?.map((action, i) => (
-                  <button 
-                    key={i} 
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center px-3 py-1.5 border border-gray-200 rounded-lg text-[13px] font-medium text-gray-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all duration-200"
-                  >
-                    <ActionIcon name={action} className="w-3.5 h-3.5 mr-1.5" />
-                    {action}
-                  </button>
-                ))}
+                {product.actions?.map((action, i) => {
+                  const link = product.actionLinks?.[action];
+                  return (
+                    <a 
+                      key={i} 
+                      href={link || '#'}
+                      target={link ? "_blank" : undefined}
+                      rel={link ? "noopener noreferrer" : undefined}
+                      onClick={(e) => {
+                        if (!link) e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      className="inline-flex items-center px-3 py-1.5 border border-gray-200 rounded-lg text-[13px] font-medium text-gray-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all duration-200"
+                    >
+                      <ActionIcon name={action} className="w-3.5 h-3.5 mr-1.5" />
+                      {action}
+                    </a>
+                  );
+                })}
               </div>
             </div>
           ))}
@@ -927,6 +937,47 @@ export default function App() {
                   className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-none"
                 />
               </div>
+              {editingItem._type === 'products' && (
+                <details className="group border border-gray-200 rounded-xl bg-gray-50 overflow-hidden">
+                  <summary className="px-4 py-3 font-medium text-gray-700 cursor-pointer select-none flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                    操作按钮链接配置
+                    <ChevronDown className="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform" />
+                  </summary>
+                  <div className="p-4 bg-white border-t border-gray-200 space-y-4">
+                    {['演示地址', '操作手册', '产品履历', '白皮书', '开发指南'].map(actionName => (
+                      <div key={actionName}>
+                        <label className="block text-sm font-medium text-gray-700 mb-1.5">{actionName}</label>
+                        <input 
+                          type="text" 
+                          value={editingItem.actionLinks?.[actionName] || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            const newLinks = {
+                              ...(editingItem.actionLinks || {}),
+                              [actionName]: val
+                            };
+                            
+                            let newActions = [...(editingItem.actions || [])];
+                            if (val && !newActions.includes(actionName)) {
+                              newActions.push(actionName);
+                            } else if (!val && newActions.includes(actionName)) {
+                              newActions = newActions.filter(a => a !== actionName);
+                            }
+                            
+                            setEditingItem({
+                              ...editingItem,
+                              actionLinks: newLinks,
+                              actions: newActions
+                            });
+                          }}
+                          placeholder={`请输入${actionName}链接`}
+                          className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              )}
               {editingItem._type === 'cases' && (
                 <>
                   <div>
