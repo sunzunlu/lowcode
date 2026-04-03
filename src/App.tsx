@@ -475,36 +475,58 @@ export default function App() {
               )}
 
               <div className="flex flex-wrap gap-2 mt-auto pt-6 border-t border-gray-50">
-                {product.actions?.map((action, i) => {
-                  const link = product.actionLinks?.[action];
-                  const isManual = action === '操作手册';
-                  const isDemo = action === '演示地址';
-                  const isModalAction = isManual || isDemo;
-                  return (
-                    <a 
-                      key={i} 
-                      href={isModalAction ? '#' : (link || '#')}
-                      target={isModalAction ? undefined : (link ? "_blank" : undefined)}
-                      rel={isModalAction ? undefined : (link ? "noopener noreferrer" : undefined)}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        if (isManual) {
-                          setActiveManualProduct(product);
-                        } else if (isDemo) {
-                          setActiveDemoProduct(product);
-                          setActiveDemoTab(0);
-                        } else if (link) {
-                          window.open(link, '_blank', 'noopener,noreferrer');
-                        }
-                      }}
-                      className="inline-flex items-center px-3 py-1.5 border border-gray-200 rounded-lg text-[13px] font-medium text-gray-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all duration-200"
-                    >
-                      <ActionIcon name={action} className="w-3.5 h-3.5 mr-1.5" />
-                      {action}
-                    </a>
-                  );
-                })}
+                {(() => {
+                  const displayActions: string[] = [];
+                  
+                  if (product.demoPlatforms && product.demoPlatforms.length > 0) {
+                    displayActions.push('演示地址');
+                  } else if (product.actions?.includes('演示地址')) {
+                    displayActions.push('演示地址');
+                  }
+                  
+                  if ((product.manuals && product.manuals.length > 0) || (product.videos && product.videos.length > 0)) {
+                    displayActions.push('操作手册');
+                  } else if (product.actions?.includes('操作手册')) {
+                    displayActions.push('操作手册');
+                  }
+                  
+                  product.actions?.forEach(action => {
+                    if (action !== '演示地址' && action !== '操作手册' && !displayActions.includes(action)) {
+                      displayActions.push(action);
+                    }
+                  });
+
+                  return displayActions.map((action, i) => {
+                    const link = product.actionLinks?.[action];
+                    const isManual = action === '操作手册';
+                    const isDemo = action === '演示地址';
+                    const isModalAction = isManual || isDemo;
+                    return (
+                      <a 
+                        key={i} 
+                        href={isModalAction ? '#' : (link || '#')}
+                        target={isModalAction ? undefined : (link ? "_blank" : undefined)}
+                        rel={isModalAction ? undefined : (link ? "noopener noreferrer" : undefined)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          if (isManual) {
+                            setActiveManualProduct(product);
+                          } else if (isDemo) {
+                            setActiveDemoProduct(product);
+                            setActiveDemoTab(0);
+                          } else if (link) {
+                            window.open(link, '_blank', 'noopener,noreferrer');
+                          }
+                        }}
+                        className="inline-flex items-center px-3 py-1.5 border border-gray-200 rounded-lg text-[13px] font-medium text-gray-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all duration-200"
+                      >
+                        <ActionIcon name={action} className="w-3.5 h-3.5 mr-1.5" />
+                        {action}
+                      </a>
+                    );
+                  });
+                })()}
               </div>
             </div>
           ))}
@@ -964,7 +986,7 @@ export default function App() {
                       <ChevronDown className="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform" />
                     </summary>
                     <div className="p-4 bg-white border-t border-gray-200 space-y-4">
-                      {['演示地址', '操作手册', '产品履历', '白皮书', '开发指南'].map(actionName => (
+                      {['产品履历', '白皮书', '开发指南'].map(actionName => (
                         <div key={actionName}>
                           <label className="block text-sm font-medium text-gray-700 mb-1.5">{actionName}</label>
                           <input 
