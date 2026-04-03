@@ -22,7 +22,11 @@ import {
   Webhook,
   Table,
   ArrowLeft,
-  CheckCircle
+  CheckCircle,
+  X,
+  Phone,
+  Mail,
+  User
 } from 'lucide-react';
 
 const products = [
@@ -224,6 +228,8 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<'home' | 'cases' | 'product'>('home');
   const [activeCategory, setActiveCategory] = useState('全部');
   const [activeProductId, setActiveProductId] = useState<string | null>(null);
+  const [isBusinessModalOpen, setIsBusinessModalOpen] = useState(false);
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
 
   const filteredCases = activeCategory === '全部' 
     ? allCases 
@@ -625,9 +631,9 @@ export default function App() {
             <div>
               <h4 className="text-white font-semibold mb-6">联系我们</h4>
               <ul className="space-y-4 text-sm">
-                <li><a href="#" className="hover:text-white transition-colors">商务合作</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">技术支持</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">加入我们</a></li>
+                <li><button onClick={() => setIsBusinessModalOpen(true)} className="hover:text-white transition-colors cursor-pointer">商务合作</button></li>
+                <li><button onClick={() => setIsSupportModalOpen(true)} className="hover:text-white transition-colors cursor-pointer">技术支持</button></li>
+                <li><a href="https://epoint.zhiye.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">加入我们</a></li>
               </ul>
             </div>
           </div>
@@ -641,6 +647,72 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Modals */}
+      {isBusinessModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+              <h3 className="text-xl font-bold text-gray-900">商务合作</h3>
+              <button onClick={() => setIsBusinessModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <p className="text-gray-600 text-sm mb-4">欢迎与我们联系，探索新点低代码平台的无限商业可能。请通过以下方式获取专属商业解决方案：</p>
+              <div className="flex items-center gap-4 p-4 bg-blue-50/50 rounded-xl border border-blue-100/50">
+                <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0"><Phone className="w-5 h-5"/></div>
+                <div>
+                  <div className="text-xs text-gray-500 mb-0.5">全国合作专线</div>
+                  <div className="font-semibold text-gray-900">400-XXX-XXXX</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 p-4 bg-green-50/50 rounded-xl border border-green-100/50">
+                <div className="w-10 h-10 bg-green-100 text-green-600 rounded-full flex items-center justify-center flex-shrink-0"><Mail className="w-5 h-5"/></div>
+                <div>
+                  <div className="text-xs text-gray-500 mb-0.5">商务洽谈邮箱</div>
+                  <div className="font-semibold text-gray-900">business@epoint.com.cn</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isSupportModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+              <h3 className="text-xl font-bold text-gray-900">技术支持与产品负责人</h3>
+              <button onClick={() => setIsSupportModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6">
+              <p className="text-gray-600 text-sm mb-6">如在使用过程中遇到技术问题，或需要产品相关的深入交流，欢迎联系我们的产品负责人：</p>
+              <div className="space-y-3">
+                {[
+                  { product: '大屏/中屏设计器', name: '张经理', desc: '负责可视化大屏、中屏看板产品线' },
+                  { product: '小屏设计器', name: '李经理', desc: '负责移动端、多端适配产品线' },
+                  { product: '表单设计器', name: '王经理', desc: '负责动态表单、数据流转产品线' },
+                  { product: '底层引擎与集成', name: '赵经理', desc: '负责工作流、API网关及底层架构' },
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-start justify-between p-4 border border-gray-100 rounded-xl hover:border-blue-200 hover:bg-blue-50/50 transition-colors group">
+                    <div>
+                      <div className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">{item.product}</div>
+                      <div className="text-sm text-gray-500 mt-1">{item.desc}</div>
+                    </div>
+                    <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100 group-hover:bg-white group-hover:border-blue-200 transition-colors">
+                      <User className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                      <span className="text-sm font-medium text-gray-700">{item.name}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
