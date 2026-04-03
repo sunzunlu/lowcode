@@ -26,7 +26,16 @@ import {
   X,
   Phone,
   Mail,
-  User
+  User,
+  LayoutDashboard,
+  Box,
+  Cpu,
+  Briefcase,
+  Settings,
+  Edit2,
+  Plus,
+  Trash2,
+  Save
 } from 'lucide-react';
 
 const products = [
@@ -279,16 +288,24 @@ const ActionIcon = ({ name, className }: { name: string, className?: string }) =
 };
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'cases' | 'product' | 'solution'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'cases' | 'product' | 'solution' | 'console'>('home');
+  const [productsData, setProductsData] = useState(products);
+  const [capabilitiesData, setCapabilitiesData] = useState(capabilities);
+  const [casesData, setCasesData] = useState(allCases);
   const [activeCategory, setActiveCategory] = useState('全部');
   const [activeProductId, setActiveProductId] = useState<string | null>(null);
   const [activeSolutionId, setActiveSolutionId] = useState<string | null>(null);
   const [isBusinessModalOpen, setIsBusinessModalOpen] = useState(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+  
+  // Console states
+  const [consoleTab, setConsoleTab] = useState<'products' | 'capabilities' | 'cases'>('products');
+  const [editingItem, setEditingItem] = useState<any>(null);
+  const [itemToDelete, setItemToDelete] = useState<{ index: number, type: string } | null>(null);
 
   const filteredCases = activeCategory === '全部' 
-    ? allCases 
-    : allCases.filter(c => c.industry === activeCategory);
+    ? casesData 
+    : casesData.filter(c => c.industry === activeCategory);
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-blue-100 selection:text-blue-900">
@@ -313,12 +330,17 @@ export default function App() {
               <span className="text-blue-600">行业案例</span>
             ) : currentPage === 'solution' ? (
               <span className="text-blue-600">解决方案详情</span>
+            ) : currentPage === 'console' ? (
+              <span className="text-blue-600">管理控制台</span>
             ) : (
               <span className="text-blue-600">产品详情</span>
             )}
           </div>
           <div className="flex items-center gap-4">
-            <button className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block">
+            <button 
+              onClick={() => setCurrentPage('console')}
+              className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block"
+            >
               登录控制台
             </button>
             <button className="text-sm font-medium bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 shadow-sm shadow-blue-600/20 transition-all active:scale-95">
@@ -410,7 +432,7 @@ export default function App() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product, index) => (
+          {productsData.map((product, index) => (
             <div 
               key={index} 
               onClick={() => {
@@ -444,7 +466,7 @@ export default function App() {
               )}
 
               <div className="flex flex-wrap gap-2 mt-auto pt-6 border-t border-gray-50">
-                {product.actions.map((action, i) => (
+                {product.actions?.map((action, i) => (
                   <button 
                     key={i} 
                     onClick={(e) => e.stopPropagation()}
@@ -469,7 +491,7 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {capabilities.map((cap, index) => (
+            {capabilitiesData.map((cap, index) => (
               <div key={index} className="flex p-6 rounded-2xl hover:bg-gray-50 transition-colors duration-300 border border-transparent hover:border-gray-100">
                 <div className="flex-shrink-0 mr-6">
                   <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
@@ -499,7 +521,7 @@ export default function App() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {allCases.slice(0, 3).map((scenario, index) => (
+          {casesData.slice(0, 3).map((scenario, index) => (
             <div 
               key={index} 
               onClick={() => {
@@ -615,7 +637,7 @@ export default function App() {
       ) : currentPage === 'solution' && activeSolutionId ? (
         <div className="pt-32 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen animate-in fade-in duration-500">
           {(() => {
-            const activeSolutionData = allCases.find(s => s.id === activeSolutionId);
+            const activeSolutionData = casesData.find(s => s.id === activeSolutionId);
             if (!activeSolutionData || !activeSolutionData.details) return null;
             return (
               <>
@@ -662,7 +684,7 @@ export default function App() {
                         解决方案亮点
                       </h2>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {activeSolutionData.details.highlights.map((hl, idx) => (
+                        {activeSolutionData.details.highlights?.map((hl, idx) => (
                           <div key={idx} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
                             <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-5 group-hover:bg-blue-600 transition-colors duration-300">
                               <CheckCircle className="w-6 h-6 text-blue-600 group-hover:text-white transition-colors duration-300" />
@@ -705,7 +727,7 @@ export default function App() {
       ) : currentPage === 'product' && activeProductId ? (
         <div className="pt-32 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen animate-in fade-in duration-500">
           {(() => {
-            const activeProductData = products.find(p => p.id === activeProductId);
+            const activeProductData = productsData.find(p => p.id === activeProductId);
             if (!activeProductData || !activeProductData.details) return null;
             return (
               <>
@@ -730,7 +752,7 @@ export default function App() {
                     核心特性与优势
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {activeProductData.details.features.map((feature, idx) => (
+                    {activeProductData.details.features?.map((feature, idx) => (
                       <div key={idx} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-100 transition-all duration-300 group">
                         <div className="flex items-start gap-4">
                           <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-blue-600 transition-colors duration-300">
@@ -749,7 +771,267 @@ export default function App() {
             );
           })()}
         </div>
+      ) : currentPage === 'console' ? (
+        <div className="pt-16 min-h-screen bg-gray-50 flex">
+          {/* Sidebar */}
+          <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
+            <div className="p-6 border-b border-gray-100">
+              <h2 className="text-lg font-bold text-gray-900 flex items-center">
+                <LayoutDashboard className="w-5 h-5 mr-2 text-blue-600" />
+                门户配置中心
+              </h2>
+            </div>
+            <div className="flex-1 py-4">
+              <nav className="space-y-1 px-3">
+                <button 
+                  onClick={() => setConsoleTab('products')}
+                  className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${consoleTab === 'products' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'}`}
+                >
+                  <Box className="w-4 h-4 mr-3" /> 产品矩阵管理
+                </button>
+                <button 
+                  onClick={() => setConsoleTab('capabilities')}
+                  className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${consoleTab === 'capabilities' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'}`}
+                >
+                  <Cpu className="w-4 h-4 mr-3" /> 底层引擎管理
+                </button>
+                <button 
+                  onClick={() => setConsoleTab('cases')}
+                  className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${consoleTab === 'cases' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'}`}
+                >
+                  <Briefcase className="w-4 h-4 mr-3" /> 行业案例管理
+                </button>
+              </nav>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1 p-8">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6 border-b border-gray-200 flex justify-between items-center bg-gray-50/50">
+                <h3 className="text-lg font-bold text-gray-900">
+                  {consoleTab === 'products' ? '产品矩阵数据' : consoleTab === 'capabilities' ? '底层引擎数据' : '行业案例数据'}
+                </h3>
+                <button 
+                  onClick={() => {
+                    const newItem: any = { _type: consoleTab, _isNew: true };
+                    if (consoleTab === 'products') {
+                      newItem.id = `new-product-${Date.now()}`;
+                      newItem.title = '';
+                      newItem.description = '';
+                      newItem.iconBg = 'bg-blue-50';
+                      newItem.iconColor = 'text-blue-600';
+                      newItem.icon = Box;
+                      newItem.subTags = [];
+                      newItem.actions = [];
+                      newItem.details = { intro: '', features: [] };
+                    } else if (consoleTab === 'capabilities') {
+                      newItem.title = '';
+                      newItem.description = '';
+                      newItem.icon = Cpu;
+                    } else if (consoleTab === 'cases') {
+                      newItem.id = `new-case-${Date.now()}`;
+                      newItem.title = '';
+                      newItem.desc = '';
+                      newItem.industry = '全部';
+                      newItem.tag = '新场景';
+                      newItem.gradient = 'from-gray-400 to-gray-500';
+                      newItem.metrics = '';
+                      newItem.details = { background: '', highlights: [] };
+                    }
+                    setEditingItem(newItem);
+                  }}
+                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                >
+                  <Plus className="w-4 h-4 mr-1.5" /> 新增记录
+                </button>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm text-gray-600">
+                  <thead className="bg-gray-50 text-gray-700 border-b border-gray-200">
+                    <tr>
+                      <th className="px-6 py-4 font-semibold">标题</th>
+                      <th className="px-6 py-4 font-semibold">描述</th>
+                      <th className="px-6 py-4 font-semibold text-right">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {(consoleTab === 'products' ? productsData : consoleTab === 'capabilities' ? capabilitiesData : casesData).map((item: any, idx: number) => (
+                      <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
+                        <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{item.title}</td>
+                        <td className="px-6 py-4 max-w-md truncate">{item.description || item.desc}</td>
+                        <td className="px-6 py-4 text-right">
+                          <button 
+                            onClick={() => setEditingItem({ ...item, _index: idx, _type: consoleTab })}
+                            className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium mr-4"
+                          >
+                            <Edit2 className="w-4 h-4 mr-1" /> 编辑
+                          </button>
+                          <button 
+                            onClick={() => setItemToDelete({ index: idx, type: consoleTab })}
+                            className="inline-flex items-center text-red-600 hover:text-red-800 font-medium"
+                          >
+                            <Trash2 className="w-4 h-4 mr-1" /> 删除
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       ) : null}
+
+      {/* Edit Modal */}
+      {editingItem && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+              <h3 className="text-xl font-bold text-gray-900">{editingItem._isNew ? '新增内容' : '编辑内容'}</h3>
+              <button onClick={() => setEditingItem(null)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6 overflow-y-auto flex-1 space-y-5">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">标题</label>
+                <input 
+                  type="text" 
+                  value={editingItem.title || ''}
+                  onChange={(e) => setEditingItem({...editingItem, title: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">描述</label>
+                <textarea 
+                  rows={4}
+                  value={editingItem.description || editingItem.desc || ''}
+                  onChange={(e) => {
+                    if (editingItem._type === 'products' || editingItem._type === 'capabilities') {
+                      setEditingItem({...editingItem, description: e.target.value});
+                    } else {
+                      setEditingItem({...editingItem, desc: e.target.value});
+                    }
+                  }}
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-none"
+                />
+              </div>
+              {editingItem._type === 'cases' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">行业分类</label>
+                    <input 
+                      type="text" 
+                      value={editingItem.industry || ''}
+                      onChange={(e) => setEditingItem({...editingItem, industry: e.target.value})}
+                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">关键指标</label>
+                    <input 
+                      type="text" 
+                      value={editingItem.metrics || ''}
+                      onChange={(e) => setEditingItem({...editingItem, metrics: e.target.value})}
+                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="p-6 border-t border-gray-100 bg-gray-50/50 flex justify-end gap-3">
+              <button 
+                onClick={() => setEditingItem(null)}
+                className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                取消
+              </button>
+              <button 
+                onClick={() => {
+                  if (editingItem._type === 'products') {
+                    const newData = [...productsData];
+                    if (editingItem._isNew) {
+                      newData.push(editingItem);
+                    } else {
+                      newData[editingItem._index] = editingItem;
+                    }
+                    setProductsData(newData);
+                  } else if (editingItem._type === 'capabilities') {
+                    const newData = [...capabilitiesData];
+                    if (editingItem._isNew) {
+                      newData.push(editingItem);
+                    } else {
+                      newData[editingItem._index] = editingItem;
+                    }
+                    setCapabilitiesData(newData);
+                  } else if (editingItem._type === 'cases') {
+                    const newData = [...casesData];
+                    if (editingItem._isNew) {
+                      newData.push(editingItem);
+                    } else {
+                      newData[editingItem._index] = editingItem;
+                    }
+                    setCasesData(newData);
+                  }
+                  setEditingItem(null);
+                }}
+                className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors shadow-sm shadow-blue-600/20"
+              >
+                <Save className="w-4 h-4 mr-1.5" /> 保存更改
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {itemToDelete && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+              <h3 className="text-xl font-bold text-gray-900">确认删除</h3>
+              <button onClick={() => setItemToDelete(null)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6">
+              <p className="text-gray-600">您确定要删除这条记录吗？此操作无法撤销。</p>
+            </div>
+            <div className="p-6 border-t border-gray-100 bg-gray-50/50 flex justify-end gap-3">
+              <button 
+                onClick={() => setItemToDelete(null)}
+                className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                取消
+              </button>
+              <button 
+                onClick={() => {
+                  if (itemToDelete.type === 'products') {
+                    const newData = [...productsData];
+                    newData.splice(itemToDelete.index, 1);
+                    setProductsData(newData);
+                  } else if (itemToDelete.type === 'capabilities') {
+                    const newData = [...capabilitiesData];
+                    newData.splice(itemToDelete.index, 1);
+                    setCapabilitiesData(newData);
+                  } else if (itemToDelete.type === 'cases') {
+                    const newData = [...casesData];
+                    newData.splice(itemToDelete.index, 1);
+                    setCasesData(newData);
+                  }
+                  setItemToDelete(null);
+                }}
+                className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-red-600 rounded-xl hover:bg-red-700 transition-colors shadow-sm shadow-red-600/20"
+              >
+                <Trash2 className="w-4 h-4 mr-1.5" /> 确认删除
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-300 py-16 border-t border-gray-800">
