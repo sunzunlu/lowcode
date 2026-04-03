@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Monitor,
   Layers,
@@ -20,35 +20,75 @@ import {
   Twitter,
   Zap,
   Webhook,
-  Table
+  Table,
+  ArrowLeft,
+  CheckCircle
 } from 'lucide-react';
 
 const products = [
   {
+    id: "big-screen",
     title: "大屏设计器",
     icon: Monitor,
     iconColor: "text-blue-600",
     iconBg: "bg-blue-50",
     description: "面向数据可视化与指挥中心场景，支持多种图表组件的拖拽式布局，快速构建数据驾驶舱大屏。",
-    actions: ["演示地址", "操作手册", "产品履历", "白皮书", "开发指南"]
+    actions: ["演示地址", "操作手册", "产品履历", "白皮书", "开发指南"],
+    details: {
+      intro: "可视化大屏设计器是一款在线开发工具，用于快速搭建可视化大屏页面，提高生产和交付效率。它是集组件开发、资源配置、大屏设计、数据对接、发布与运行的一体化平台，能快速将数据通过可视化的方式展现出来。",
+      features: [
+        { title: "操作简单，所见即所得", desc: "使用者只需要重点围绕图层、画布、组件三块主体功能区，通过简单的拖拉配置即可生成一张可视化页面，通过预览和发布分享功能便可查看大屏。" },
+        { title: "丰富强大的组件配置", desc: "设计器内置了包含各种形式的柱状图、折线图、饼图的常规图表，能自由切换或者沉淀各种主题，满足各类风格需求；另外提供的辅助组件利用现代浏览器的特性，可以实现各种动画、视觉变换等效果，让大屏展现形式更丰富。" },
+        { title: "后台管理功能丰富", desc: "后台集成了组件、字体、主题、插件、素材和收藏等一系列大屏资源的管理功能，以及可以对大屏进行的复制、删除、导出等功能操作，在资源的用户权限分离上利用F9框架的角色权限能力可实现灵活配置。" },
+        { title: "支持多种类型数据源", desc: "设计器目前支持静态数据、API接口两种类型的数据源。静态数据适用于Demo搭建，对于快速演示的场景，可直接在设计器中写入演示数据无需接口开发，方便快捷；API接口应用于实际项目落地开发，对接正式数据，设计器提供了丰富的数据请求配置，包括参数注入、自动刷新、数据过滤等功能，结合后台数据源管理模块能快速进行项目的复用。" },
+        { title: "支持自定义组件开发", desc: "当内置组件无法满足需求时，可通过组件开发脚手架进行自定义组件开发，集成了创建、调试、预览、打包等一体化流程；将组件包上传至平台即可使用新的组件，脚手架提供了完整的开发手册，上手快；完善的版本机制及利用工程化的特性兼顾了相同组件不同版本之间的隔离。" },
+        { title: "支持资产的沉淀和复用", desc: "复用的核心先要将好的资产如大屏、组件进行沉淀，然后将它们快速应用到新大屏中，设计器通过素材管理、成组收藏、大屏复制等功能来对大屏的资产进行沉淀，覆盖了大屏在搭建过程中需要使用的各个层面的资产，无论是局部复用或者整屏复用，都可大幅提升大屏的搭建效率。" }
+      ]
+    }
   },
   {
+    id: "mid-screen",
     title: "中屏设计器",
     icon: LayoutGrid,
     iconColor: "text-purple-600",
     iconBg: "bg-purple-50",
     description: "管理驾驶舱与数据看板场景，提供丰富的业务组件与模板，适配中等屏幕分辨率的管理后台。",
-    actions: ["演示地址", "操作手册", "产品履历", "白皮书", "开发指南"]
+    actions: ["演示地址", "操作手册", "产品履历", "白皮书", "开发指南"],
+    details: {
+      intro: "所见即所得的数字看板设计器，低成本可视化配置，按角色与个人偏好快速交付千人千面看板。",
+      features: [
+        { title: "所见即所得编辑器", desc: "可视化拖拽画布与实时预览，用户无需编码即可配置布局和组件，编辑即所见。" },
+        { title: "灵活的数据配置与联动", desc: "通过可视化的数据源配置和事件联动，支持搜索、参数注入和跨组件联动更新。" },
+        { title: "丰富的组件库与自定义扩展", desc: "内置常用图表和元件，并提供组件脚手架以便快速开发、调试与发布自定义组件。" },
+        { title: "角色与权限化管理", desc: "系统管理员可按角色下发看板，支持页面级与组件级权限配置，满足差异化查看需求。" },
+        { title: "资产沉淀与模板复用", desc: "支持将看板和组件沉淀为可复用资产与模板，便于低代码快速复用和二次开发。" },
+        { title: "无需为每个看板定制接口", desc: "依托 API 管理平台进行接口编排，降低单看板接口开发成本，加速交付。" },
+        { title: "多部署与运维支持", desc: "支持集成部署与独立部署两种模式，适配不同交付与运维需求。" }
+      ]
+    }
   },
   {
+    id: "small-screen",
     title: "小屏设计器",
     icon: Smartphone,
     iconColor: "text-green-600",
     iconBg: "bg-green-50",
     description: "专为移动端、H5与小程序场景打造，支持响应式布局与移动端交互组件，一键发布多端应用。",
-    actions: ["演示地址", "操作手册", "产品履历", "白皮书", "开发指南"]
+    actions: ["演示地址", "操作手册", "产品履历", "白皮书", "开发指南"],
+    details: {
+      intro: "移动小屏是一款用来构建移动应用的低代码平台，开发者、用户可以根据自身业务的需求来实现不同的APP应用场景，比如：数字看板、移动首页门户等。",
+      features: [
+        { title: "操作简单，所见即所得", desc: "使用者只需要重点围绕图层、画布、组件三块主体功能区，通过简单的拖拉配置即可生成一张可视化页面，通过预览和发布分享功能便可查看小屏。" },
+        { title: "多端发布", desc: "基于新点前端框架开发的移动页面应用支持多端发布，可以一键转换为新点小程序、微信小程序、钉钉、支付宝、讯盟等三方平台小程序包，真正做到开发一次，多端运行，满足客户多终端、多平台、自我定制等个性化需求，满足敏捷交付要求。" },
+        { title: "制定行业标准，促进资产沉淀和生态建设", desc: "为高效复用数字化运营资产、降低技术复杂度、减少重复开发和浪费，通过制定统一的扩展组件（卡片）规范，明确卡片开发、上架和运行平台的要求，减少重复开发，实现跨项目复用，促进卡片资产沉淀和生态建设，助力客户创建数据资产运营中枢平台" },
+        { title: "聚焦数字看板业务场景，快速助力政府智慧城市系统搭建", desc: "基于统一可视化工具开发小屏可视化卡片，灵活编排页面，将移动端的业务指标卡片沉淀到低码资产平台，以数字看板的形式呈现，通过直观查看城市各个方面运营情况并对指标进行预警、挖掘和分析，为领导提供辅助决策支持。" },
+        { title: "支持开放式接入", desc: "小屏低代码提供了完善的开放文档和指导手册，使得ISV开发商能够快速实现自己的业务需求，同时，基于全端的自助式开发工具,降低专题配置开发的门槛，加快接入的效率，允许ISV合作伙伴基于原子组件进行二次开发实现更复杂的业务场景。" },
+        { title: "集成API网关能力", desc: "小屏引擎集成了新点API网关管理和指标工厂能力，统一提供数据集成入口和标准接入规范，客户侧采集的大数据业务指标可直接与新点API网关进行对接，API网关统一为小屏引擎提供标准的数据接入规范，实现数据与卡片模板的渲染和驱动，为客户提供更为丰富的数字城市仪表盘。" }
+      ]
+    }
   },
   {
+    id: "form",
     title: "表单设计器",
     icon: FileText,
     iconColor: "text-orange-600",
@@ -57,6 +97,7 @@ const products = [
     actions: ["演示地址", "操作手册", "产品履历", "白皮书", "开发指南"]
   },
   {
+    id: "others",
     title: "其他专项设计器",
     icon: Blocks,
     iconColor: "text-pink-600",
@@ -105,23 +146,74 @@ const capabilities = [
   }
 ];
 
-const scenarios = [
+const allCases = [
   {
     title: "智慧城市指挥中心",
+    industry: "政务",
     tag: "大屏场景",
-    gradient: "from-blue-500 to-cyan-400"
+    gradient: "from-blue-500 to-cyan-400",
+    desc: "整合城市交通、安防、环境等多维数据，实现一屏统管与高效决策。",
+    metrics: "响应效率提升 40%"
   },
   {
     title: "企业内部 ERP 系统",
+    industry: "制造",
     tag: "中屏场景",
-    gradient: "from-purple-500 to-indigo-500"
+    gradient: "from-purple-500 to-indigo-500",
+    desc: "打通生产、库存、销售环节，实现业务流程全链路数字化与可视化。",
+    metrics: "开发周期缩短 60%"
   },
   {
     title: "现场巡检移动助手",
+    industry: "能源",
     tag: "小屏场景",
-    gradient: "from-emerald-400 to-teal-500"
+    gradient: "from-emerald-400 to-teal-500",
+    desc: "支持离线表单、扫码、拍照，规范一线人员巡检作业流程。",
+    metrics: "数据准确率 99%"
+  },
+  {
+    title: "全渠道营销分析罗盘",
+    industry: "零售",
+    tag: "大屏场景",
+    gradient: "from-orange-400 to-pink-500",
+    desc: "实时监控各渠道销售转化漏斗，为精准营销决策提供数据支撑。",
+    metrics: "转化率提升 15%"
+  },
+  {
+    title: "信贷审批工作流",
+    industry: "金融",
+    tag: "表单场景",
+    gradient: "from-blue-600 to-indigo-600",
+    desc: "复杂的条件分支与多级审批，集成 OCR 自动识别，提升审批效率。",
+    metrics: "审批时间缩短 3 天"
+  },
+  {
+    title: "智慧医院导诊大屏",
+    industry: "医疗",
+    tag: "大屏场景",
+    gradient: "from-teal-400 to-cyan-500",
+    desc: "实时展示科室排队情况、医生排班，优化患者就医体验。",
+    metrics: "排队时间减少 20%"
+  },
+  {
+    title: "供应商协同门户",
+    industry: "制造",
+    tag: "中屏场景",
+    gradient: "from-slate-500 to-gray-700",
+    desc: "实现采购订单、发货、对账全流程在线协同，降低企业间沟通成本。",
+    metrics: "协同效率提升 50%"
+  },
+  {
+    title: "设备报修小程序",
+    industry: "物业",
+    tag: "小屏场景",
+    gradient: "from-amber-400 to-orange-500",
+    desc: "业主一键报修，维修工单自动派发，服务进度实时追踪与评价。",
+    metrics: "客户满意度 98%"
   }
 ];
+
+const categories = ["全部", "政务", "制造", "零售", "金融", "医疗", "能源", "物业"];
 
 const ActionIcon = ({ name, className }: { name: string, className?: string }) => {
   switch (name) {
@@ -135,22 +227,38 @@ const ActionIcon = ({ name, className }: { name: string, className?: string }) =
 };
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState<'home' | 'cases' | 'product'>('home');
+  const [activeCategory, setActiveCategory] = useState('全部');
+  const [activeProductId, setActiveProductId] = useState<string | null>(null);
+
+  const filteredCases = activeCategory === '全部' 
+    ? allCases 
+    : allCases.filter(c => c.industry === activeCategory);
+
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans selection:bg-blue-100 selection:text-blue-900">
       {/* Navigation Bar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setCurrentPage('home')}>
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm shadow-blue-600/20">
               <Blocks className="w-5 h-5 text-white" />
             </div>
             <span className="font-bold text-xl text-gray-900 tracking-tight">LowCode Pro</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
-            <a href="#" className="text-blue-600">首页</a>
-            <a href="#products" className="hover:text-blue-600 transition-colors">产品矩阵</a>
-            <a href="#capabilities" className="hover:text-blue-600 transition-colors">底层引擎</a>
-            <a href="#scenarios" className="hover:text-blue-600 transition-colors">解决方案</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }} className={currentPage === 'home' ? "text-blue-600" : "hover:text-blue-600 transition-colors"}>首页</a>
+            {currentPage === 'home' ? (
+              <>
+                <a href="#products" className="hover:text-blue-600 transition-colors">产品矩阵</a>
+                <a href="#capabilities" className="hover:text-blue-600 transition-colors">底层引擎</a>
+                <a href="#scenarios" className="hover:text-blue-600 transition-colors">解决方案</a>
+              </>
+            ) : currentPage === 'cases' ? (
+              <span className="text-blue-600">行业案例</span>
+            ) : (
+              <span className="text-blue-600">产品详情</span>
+            )}
           </div>
           <div className="flex items-center gap-4">
             <button className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block">
@@ -163,6 +271,9 @@ export default function App() {
         </div>
       </nav>
 
+      {/* Main Content Area */}
+      {currentPage === 'home' ? (
+        <>
       {/* Hero Section */}
       <div className="relative bg-gradient-to-b from-[#eef2f6] to-[#fafafa] overflow-hidden pt-32 pb-24">
         {/* Decorative Background */}
@@ -245,7 +356,14 @@ export default function App() {
           {products.map((product, index) => (
             <div 
               key={index} 
-              className="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:-translate-y-1 transition-all duration-300 flex flex-col group"
+              onClick={() => {
+                if (product.details) {
+                  setActiveProductId(product.id);
+                  setCurrentPage('product');
+                  window.scrollTo(0, 0);
+                }
+              }}
+              className={`bg-white rounded-2xl border border-gray-100 p-8 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:-translate-y-1 transition-all duration-300 flex flex-col group ${product.details ? 'cursor-pointer' : ''}`}
             >
               <div className="flex items-center mb-5">
                 <div className={`w-12 h-12 rounded-xl ${product.iconBg} ${product.iconColor} flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300`}>
@@ -272,6 +390,7 @@ export default function App() {
                 {product.actions.map((action, i) => (
                   <button 
                     key={i} 
+                    onClick={(e) => e.stopPropagation()}
                     className="inline-flex items-center px-3 py-1.5 border border-gray-200 rounded-lg text-[13px] font-medium text-gray-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all duration-200"
                   >
                     <ActionIcon name={action} className="w-3.5 h-3.5 mr-1.5" />
@@ -317,13 +436,13 @@ export default function App() {
             <h2 className="text-3xl font-bold text-gray-900 mb-4 tracking-tight">行业应用场景</h2>
             <p className="text-gray-500 text-lg max-w-2xl">各行各业都在使用我们的低代码平台加速数字化创新。</p>
           </div>
-          <button className="inline-flex items-center text-blue-600 font-medium hover:text-blue-700 transition-colors">
+          <button onClick={() => setCurrentPage('cases')} className="inline-flex items-center text-blue-600 font-medium hover:text-blue-700 transition-colors">
             查看更多案例 <ChevronRight className="w-4 h-4 ml-1" />
           </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {scenarios.map((scenario, index) => (
+          {allCases.slice(0, 3).map((scenario, index) => (
             <div key={index} className="group rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300">
               <div className={`h-48 bg-gradient-to-br ${scenario.gradient} p-6 flex flex-col justify-between relative overflow-hidden`}>
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300"></div>
@@ -345,6 +464,129 @@ export default function App() {
           ))}
         </div>
       </div>
+      </>
+      ) : currentPage === 'cases' ? (
+        <div className="pt-32 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen animate-in fade-in duration-500">
+          <div className="mb-10">
+            <button onClick={() => setCurrentPage('home')} className="inline-flex items-center text-gray-500 hover:text-blue-600 mb-6 transition-colors font-medium text-sm">
+              <ArrowLeft className="w-4 h-4 mr-2" /> 返回首页
+            </button>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4 tracking-tight">行业应用案例</h1>
+            <p className="text-lg text-gray-600 max-w-3xl">探索各行业领先企业如何使用 LowCode Pro 驱动业务创新，实现数字化转型与降本增效。</p>
+          </div>
+
+          {/* Filters */}
+          <div className="flex flex-wrap gap-3 mb-12">
+            {categories.map(cat => (
+              <button 
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  activeCategory === cat 
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20 scale-105' 
+                    : 'bg-white text-gray-600 border border-gray-200 hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Cases Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredCases.map((scenario, index) => (
+              <div key={index} className="group bg-white rounded-2xl overflow-hidden cursor-pointer shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                <div className={`h-48 bg-gradient-to-br ${scenario.gradient} p-6 flex flex-col justify-between relative overflow-hidden`}>
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300"></div>
+                  <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                  <div className="relative z-10 flex justify-between items-start">
+                    <span className="inline-flex px-3 py-1 bg-white/20 backdrop-blur-md text-white text-xs font-medium rounded-full border border-white/20">
+                      {scenario.tag}
+                    </span>
+                    <span className="inline-flex px-3 py-1 bg-black/20 backdrop-blur-md text-white text-xs font-medium rounded-full">
+                      {scenario.industry}
+                    </span>
+                  </div>
+                  <h3 className="relative z-10 text-2xl font-bold text-white mt-auto">
+                    {scenario.title}
+                  </h3>
+                </div>
+                <div className="p-6 flex flex-col flex-grow">
+                  <p className="text-gray-600 text-[15px] leading-relaxed mb-6 flex-grow">
+                    {scenario.desc}
+                  </p>
+                  <div className="flex items-center justify-between pt-5 border-t border-gray-50">
+                    <div className="flex items-center text-blue-600 font-semibold text-sm bg-blue-50 px-3 py-1.5 rounded-lg">
+                      <TrendingUp className="w-4 h-4 mr-1.5" />
+                      {scenario.metrics}
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                      <ChevronRight className="w-4 h-4" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {filteredCases.length === 0 && (
+            <div className="py-20 text-center">
+              <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Monitor className="w-8 h-8 text-gray-300" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">暂无相关案例</h3>
+              <p className="text-gray-500">该行业分类下暂无公开的客户案例</p>
+            </div>
+          )}
+        </div>
+      ) : currentPage === 'product' && activeProductId ? (
+        <div className="pt-32 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen animate-in fade-in duration-500">
+          {(() => {
+            const activeProductData = products.find(p => p.id === activeProductId);
+            if (!activeProductData || !activeProductData.details) return null;
+            return (
+              <>
+                <div className="mb-12">
+                  <button onClick={() => setCurrentPage('home')} className="inline-flex items-center text-gray-500 hover:text-blue-600 mb-8 transition-colors font-medium text-sm">
+                    <ArrowLeft className="w-4 h-4 mr-2" /> 返回首页
+                  </button>
+                  <div className="flex items-center gap-5 mb-6">
+                    <div className={`w-16 h-16 rounded-2xl ${activeProductData.iconBg} ${activeProductData.iconColor} flex items-center justify-center shadow-sm`}>
+                      <activeProductData.icon className="w-8 h-8" />
+                    </div>
+                    <h1 className="text-4xl font-bold text-gray-900 tracking-tight">{activeProductData.title}</h1>
+                  </div>
+                  <p className="text-lg text-gray-600 max-w-4xl leading-relaxed bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    {activeProductData.details.intro}
+                  </p>
+                </div>
+
+                <div className="mb-8">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                    <span className="w-1.5 h-6 bg-blue-600 rounded-full mr-3"></span>
+                    核心特性与优势
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {activeProductData.details.features.map((feature, idx) => (
+                      <div key={idx} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-100 transition-all duration-300 group">
+                        <div className="flex items-start gap-4">
+                          <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-blue-600 transition-colors duration-300">
+                            <CheckCircle className="w-5 h-5 text-blue-600 group-hover:text-white transition-colors duration-300" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300">{feature.title}</h3>
+                            <p className="text-gray-600 leading-relaxed text-[15px]">{feature.desc}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            );
+          })()}
+        </div>
+      ) : null}
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-300 py-16 border-t border-gray-800">
