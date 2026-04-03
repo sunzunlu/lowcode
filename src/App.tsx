@@ -38,7 +38,10 @@ import {
   Save,
   ChevronDown,
   Video,
-  RefreshCw
+  RefreshCw,
+  Copy,
+  ExternalLink,
+  MonitorPlay
 } from 'lucide-react';
 
 const products = [
@@ -299,6 +302,8 @@ export default function App() {
   const [activeProductId, setActiveProductId] = useState<string | null>(null);
   const [activeSolutionId, setActiveSolutionId] = useState<string | null>(null);
   const [activeManualProduct, setActiveManualProduct] = useState<any>(null);
+  const [activeDemoProduct, setActiveDemoProduct] = useState<any>(null);
+  const [activeDemoTab, setActiveDemoTab] = useState<number>(0);
   const [isBusinessModalOpen, setIsBusinessModalOpen] = useState(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   
@@ -473,17 +478,22 @@ export default function App() {
                 {product.actions?.map((action, i) => {
                   const link = product.actionLinks?.[action];
                   const isManual = action === '操作手册';
+                  const isDemo = action === '演示地址';
+                  const isModalAction = isManual || isDemo;
                   return (
                     <a 
                       key={i} 
-                      href={isManual ? '#' : (link || '#')}
-                      target={isManual ? undefined : (link ? "_blank" : undefined)}
-                      rel={isManual ? undefined : (link ? "noopener noreferrer" : undefined)}
+                      href={isModalAction ? '#' : (link || '#')}
+                      target={isModalAction ? undefined : (link ? "_blank" : undefined)}
+                      rel={isModalAction ? undefined : (link ? "noopener noreferrer" : undefined)}
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         if (isManual) {
                           setActiveManualProduct(product);
+                        } else if (isDemo) {
+                          setActiveDemoProduct(product);
+                          setActiveDemoTab(0);
                         } else if (link) {
                           window.open(link, '_blank', 'noopener,noreferrer');
                         }
@@ -990,6 +1000,135 @@ export default function App() {
 
                   <details className="group border border-gray-200 rounded-xl bg-gray-50 overflow-hidden">
                     <summary className="px-4 py-3 font-medium text-gray-700 cursor-pointer select-none flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                      演示环境管理
+                      <ChevronDown className="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform" />
+                    </summary>
+                    <div className="p-4 bg-white border-t border-gray-200 space-y-6">
+                      <div className="flex items-center justify-between mb-3">
+                        <label className="block text-sm font-medium text-gray-700">演示平台列表</label>
+                        <button 
+                          onClick={() => {
+                            const newPlatforms = [...(editingItem.demoPlatforms || []), { name: '', url: '', accounts: [] }];
+                            setEditingItem({ ...editingItem, demoPlatforms: newPlatforms });
+                          }}
+                          className="text-xs text-blue-600 hover:text-blue-800 flex items-center"
+                        >
+                          <Plus className="w-3 h-3 mr-1" /> 添加平台
+                        </button>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        {(editingItem.demoPlatforms || []).map((platform: any, pIdx: number) => (
+                          <div key={pIdx} className="bg-gray-50 rounded-xl border border-gray-200 p-4 relative">
+                            <button 
+                              onClick={() => {
+                                const newPlatforms = [...editingItem.demoPlatforms];
+                                newPlatforms.splice(pIdx, 1);
+                                setEditingItem({ ...editingItem, demoPlatforms: newPlatforms });
+                              }}
+                              className="absolute top-4 right-4 p-1.5 text-red-500 hover:bg-red-50 rounded-md transition-colors"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 pr-10">
+                              <div>
+                                <label className="block text-xs font-medium text-gray-500 mb-1">平台名称</label>
+                                <input 
+                                  type="text" placeholder="例如：中心端" value={platform.name}
+                                  onChange={(e) => {
+                                    const newPlatforms = [...editingItem.demoPlatforms];
+                                    newPlatforms[pIdx].name = e.target.value;
+                                    setEditingItem({ ...editingItem, demoPlatforms: newPlatforms });
+                                  }}
+                                  className="w-full px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 outline-none"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-xs font-medium text-gray-500 mb-1">系统地址</label>
+                                <input 
+                                  type="text" placeholder="http://" value={platform.url}
+                                  onChange={(e) => {
+                                    const newPlatforms = [...editingItem.demoPlatforms];
+                                    newPlatforms[pIdx].url = e.target.value;
+                                    setEditingItem({ ...editingItem, demoPlatforms: newPlatforms });
+                                  }}
+                                  className="w-full px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 outline-none"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="border-t border-gray-200 pt-4">
+                              <div className="flex items-center justify-between mb-3">
+                                <label className="block text-xs font-medium text-gray-700">测试账号</label>
+                                <button 
+                                  onClick={() => {
+                                    const newPlatforms = [...editingItem.demoPlatforms];
+                                    newPlatforms[pIdx].accounts = [...(newPlatforms[pIdx].accounts || []), { role: '', username: '', password: '' }];
+                                    setEditingItem({ ...editingItem, demoPlatforms: newPlatforms });
+                                  }}
+                                  className="text-xs text-blue-600 hover:text-blue-800 flex items-center"
+                                >
+                                  <Plus className="w-3 h-3 mr-1" /> 添加账号
+                                </button>
+                              </div>
+                              
+                              <div className="space-y-2">
+                                {(platform.accounts || []).map((account: any, aIdx: number) => (
+                                  <div key={aIdx} className="flex items-start gap-2 bg-white p-2 rounded-lg border border-gray-100">
+                                    <div className="grid grid-cols-3 gap-2 flex-1">
+                                      <input 
+                                        type="text" placeholder="角色 (如: 代理机构)" value={account.role}
+                                        onChange={(e) => {
+                                          const newPlatforms = [...editingItem.demoPlatforms];
+                                          newPlatforms[pIdx].accounts[aIdx].role = e.target.value;
+                                          setEditingItem({ ...editingItem, demoPlatforms: newPlatforms });
+                                        }}
+                                        className="w-full px-2 py-1 text-xs bg-gray-50 border border-gray-200 rounded focus:ring-1 focus:ring-blue-500 outline-none"
+                                      />
+                                      <input 
+                                        type="text" placeholder="用户名" value={account.username}
+                                        onChange={(e) => {
+                                          const newPlatforms = [...editingItem.demoPlatforms];
+                                          newPlatforms[pIdx].accounts[aIdx].username = e.target.value;
+                                          setEditingItem({ ...editingItem, demoPlatforms: newPlatforms });
+                                        }}
+                                        className="w-full px-2 py-1 text-xs bg-gray-50 border border-gray-200 rounded focus:ring-1 focus:ring-blue-500 outline-none"
+                                      />
+                                      <input 
+                                        type="text" placeholder="密码" value={account.password}
+                                        onChange={(e) => {
+                                          const newPlatforms = [...editingItem.demoPlatforms];
+                                          newPlatforms[pIdx].accounts[aIdx].password = e.target.value;
+                                          setEditingItem({ ...editingItem, demoPlatforms: newPlatforms });
+                                        }}
+                                        className="w-full px-2 py-1 text-xs bg-gray-50 border border-gray-200 rounded focus:ring-1 focus:ring-blue-500 outline-none"
+                                      />
+                                    </div>
+                                    <button 
+                                      onClick={() => {
+                                        const newPlatforms = [...editingItem.demoPlatforms];
+                                        newPlatforms[pIdx].accounts.splice(aIdx, 1);
+                                        setEditingItem({ ...editingItem, demoPlatforms: newPlatforms });
+                                      }}
+                                      className="p-1 text-red-500 hover:bg-red-50 rounded transition-colors"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                  </div>
+                                ))}
+                                {!(platform.accounts?.length > 0) && <div className="text-xs text-gray-400 text-center py-1">暂无账号</div>}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                        {!(editingItem.demoPlatforms?.length > 0) && <div className="text-sm text-gray-400 text-center py-4 border border-dashed border-gray-200 rounded-xl">暂无演示平台</div>}
+                      </div>
+                    </div>
+                  </details>
+
+                  <details className="group border border-gray-200 rounded-xl bg-gray-50 overflow-hidden">
+                    <summary className="px-4 py-3 font-medium text-gray-700 cursor-pointer select-none flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
                       操作手册与视频管理
                       <ChevronDown className="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform" />
                     </summary>
@@ -1324,6 +1463,151 @@ export default function App() {
       </footer>
 
       {/* Modals */}
+      {activeDemoProduct && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-gray-900/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl shadow-2xl shadow-blue-900/10 w-full max-w-5xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh] border border-gray-100">
+            {/* Header */}
+            <div className="px-8 py-6 flex justify-between items-center border-b border-gray-100 bg-white/50 backdrop-blur-xl sticky top-0 z-20">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center border border-blue-100/50">
+                  <MonitorPlay className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">{activeDemoProduct.title}</h3>
+                  <p className="text-sm text-gray-500 mt-0.5">演示环境与账号信息</p>
+                </div>
+              </div>
+              <button onClick={() => setActiveDemoProduct(null)} className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            {/* Content */}
+            <div className="p-8 overflow-y-auto flex-1 bg-gray-50/30">
+              {activeDemoProduct.demoPlatforms && activeDemoProduct.demoPlatforms.length > 0 ? (
+                <>
+                  {/* Tabs */}
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {activeDemoProduct.demoPlatforms.map((platform: any, idx: number) => (
+                      <button
+                        key={idx}
+                        onClick={() => setActiveDemoTab(idx)}
+                        className={`px-6 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                          activeDemoTab === idx
+                            ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                            : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:text-gray-900'
+                        }`}
+                      >
+                        {platform.name}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Active Platform Content */}
+                  {activeDemoProduct.demoPlatforms[activeDemoTab] && (
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
+                      {/* System URL */}
+                      <div className="bg-white rounded-2xl border border-gray-200/80 p-5 mb-8 flex items-center gap-4 shadow-sm">
+                        <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center flex-shrink-0">
+                          <LinkIcon className="w-5 h-5 text-gray-500" />
+                        </div>
+                        <div className="flex-1 overflow-hidden">
+                          <p className="text-xs text-gray-500 mb-1">系统地址</p>
+                          <a 
+                            href={activeDemoProduct.demoPlatforms[activeDemoTab].url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-sm font-medium text-blue-600 hover:text-blue-800 truncate block transition-colors"
+                          >
+                            {activeDemoProduct.demoPlatforms[activeDemoTab].url}
+                          </a>
+                        </div>
+                        <a 
+                          href={activeDemoProduct.demoPlatforms[activeDemoTab].url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="px-4 py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 flex-shrink-0"
+                        >
+                          <ExternalLink className="w-4 h-4" /> 访问系统
+                        </a>
+                      </div>
+
+                      {/* Accounts Grid */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        {activeDemoProduct.demoPlatforms[activeDemoTab].accounts && activeDemoProduct.demoPlatforms[activeDemoTab].accounts.length > 0 ? (
+                          activeDemoProduct.demoPlatforms[activeDemoTab].accounts.map((account: any, idx: number) => (
+                            <div key={idx} className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden hover:border-blue-300 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300">
+                              <div className="bg-gradient-to-r from-blue-500 to-cyan-500 px-5 py-3 flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-white/80"></div>
+                                <h5 className="text-sm font-medium text-white">{account.role}</h5>
+                              </div>
+                              <div className="p-5 space-y-4">
+                                <div className="flex items-center justify-between group">
+                                  <div>
+                                    <p className="text-xs text-gray-500 mb-1">用户名</p>
+                                    <p className="text-sm font-medium text-gray-900 font-mono">{account.username}</p>
+                                  </div>
+                                  <button 
+                                    onClick={() => navigator.clipboard.writeText(account.username)}
+                                    className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-md opacity-0 group-hover:opacity-100 transition-all flex items-center gap-1 text-xs font-medium"
+                                    title="复制用户名"
+                                  >
+                                    <Copy className="w-3.5 h-3.5" /> 复制
+                                  </button>
+                                </div>
+                                <div className="h-px bg-gray-100"></div>
+                                <div className="flex items-center justify-between group">
+                                  <div>
+                                    <p className="text-xs text-gray-500 mb-1">密码</p>
+                                    <p className="text-sm font-medium text-gray-900 font-mono">{account.password}</p>
+                                  </div>
+                                  <button 
+                                    onClick={() => navigator.clipboard.writeText(account.password)}
+                                    className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-md opacity-0 group-hover:opacity-100 transition-all flex items-center gap-1 text-xs font-medium"
+                                    title="复制密码"
+                                  >
+                                    <Copy className="w-3.5 h-3.5" /> 复制
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="col-span-full flex flex-col items-center justify-center py-12 bg-white rounded-2xl border border-gray-100 border-dashed">
+                            <User className="w-8 h-8 text-gray-300 mb-3" />
+                            <p className="text-sm text-gray-500">暂无测试账号</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-gray-100 border-dashed h-full">
+                  <MonitorPlay className="w-12 h-12 text-gray-300 mb-4" />
+                  <p className="text-base font-medium text-gray-900 mb-1">暂无演示环境</p>
+                  <p className="text-sm text-gray-500">该产品尚未配置演示环境信息</p>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="bg-white px-8 py-5 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-2 text-sm text-gray-500">
+                <User className="w-4 h-4" />
+                <span>如有问题请联系：<span className="font-medium text-gray-700">{activeDemoProduct.contact || '管理员'}</span></span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-400">产品版本</span>
+                <span className="px-2.5 py-1 bg-gray-100 text-gray-600 text-xs font-mono font-medium rounded-md">
+                  v{activeDemoProduct.version || '1.0.0.0'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {activeManualProduct && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-gray-900/40 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-white rounded-3xl shadow-2xl shadow-blue-900/10 w-full max-w-5xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh] border border-gray-100">
