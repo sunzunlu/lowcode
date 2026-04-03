@@ -162,52 +162,106 @@ const capabilities = [
 
 const allCases = [
   {
+    id: "trade-mall",
     title: "交易移动商城",
     industry: "智慧招采",
     tag: "小屏场景",
     gradient: "from-blue-500 to-cyan-400",
     desc: "支持投标人/供应商的移动端操作（如移动CA认证、标书查看、电子签章等），支持“不见面”交易全流程移动化。",
-    metrics: "降低定制开发成本"
+    metrics: "降低定制开发成本",
+    details: {
+      background: "传统招采业务高度依赖PC端，参与各方在移动场景下缺乏便捷的业务办理入口。定制开发移动端APP成本高昂且迭代缓慢。",
+      highlights: [
+        { title: "可视化移动端搭建", desc: "依托小屏设计器，通过丰富组件拖拽快速生成移动端页面。" },
+        { title: "核心业务能力集成", desc: "无缝对接移动CA、电子签章等招采核心组件。" },
+        { title: "多端极速发布", desc: "一次开发，自动适配并发布至各类小程序及APP。" }
+      ]
+    }
   },
   {
+    id: "gov-dashboard",
     title: "政务服务领导驾驶舱",
     industry: "智慧政务",
     tag: "中/小屏场景",
     gradient: "from-purple-500 to-indigo-500",
     desc: "领导/管理人员通过手机/平板随时查看政务数据，政务大厅展示实时数据驾驶舱、业务专题。",
-    metrics: "提升项目交付效率"
+    metrics: "提升项目交付效率",
+    details: {
+      background: "政务数据分散在各个业务系统中，领导管理者缺乏一个全局视角的移动端数据看板，难以进行随时随地的科学决策。",
+      highlights: [
+        { title: "多源数据融合", desc: "通过底层数据模型与API网关，快速接入各委办局业务数据。" },
+        { title: "丰富图表呈现", desc: "内置海量政务类可视化图表组件，直观展示城市运行态势。" },
+        { title: "PC与移动端联动", desc: "中屏设计器与小屏设计器结合，实现大厅看板与领导手机端的数据同源与自适应展示。" }
+      ]
+    }
   },
   {
+    id: "build-data",
     title: "建筑数据分析平台",
     industry: "数字建筑",
     tag: "多端联动",
     gradient: "from-emerald-400 to-teal-500",
     desc: "融合大中小屏，实现工程建设全生命周期数据可视化，支持物联网实时感知、BIM数据融合、AI预警等。",
-    metrics: "数据互通与实时协同"
+    metrics: "数据互通与实时协同",
+    details: {
+      background: "工程建设项目周期长、参与方多，各类进度、质量、安全数据难以统一汇聚和直观展示，存在监管盲区。",
+      highlights: [
+        { title: "全景大屏指挥", desc: "利用大屏设计器构建指挥中心总览，实现项目全生命周期可视化。" },
+        { title: "BIM/IoT深度融合", desc: "支持接入BIM模型与现场物联网设备数据，实现虚实结合的数字孪生。" },
+        { title: "智能预警分析", desc: "结合动作流配置复杂预警规则，实现隐患的自动发现与推送。" }
+      ]
+    }
   },
   {
+    id: "build-sys",
     title: "智慧住建业务系统",
     industry: "数字建筑",
     tag: "小屏场景",
     gradient: "from-orange-400 to-pink-500",
     desc: "移动端监管APP或小程序，支持住建主管部门/企业现场人员进行数据上报、巡检、监管、查询等。",
-    metrics: "助力监管框架落地"
+    metrics: "助力监管框架落地",
+    details: {
+      background: "住建领域涉及大量现场巡查、执法与数据上报工作，一线人员急需轻量化、易操作的移动端工具。",
+      highlights: [
+        { title: "表单快速构建", desc: "结合表单设计器与小屏设计器，快速生成各类巡检与上报表单。" },
+        { title: "离线与定位支持", desc: "支持移动端离线缓存与GPS定位打卡，适应复杂工地环境。" },
+        { title: "业务流程闭环", desc: "无缝对接工作流引擎，实现隐患上报、整改、复查的业务闭环。" }
+      ]
+    }
   },
   {
+    id: "gov-supervision",
     title: "数字化监管系统",
     industry: "智慧政务",
     tag: "小屏场景",
     gradient: "from-blue-600 to-indigo-600",
     desc: "移动端咨询详情、办事指南、数据统计等小屏场景，实现“一次PC设计 → 自动转为移动样式”。",
-    metrics: "多终端自动适配"
+    metrics: "多终端自动适配",
+    details: {
+      background: "随着监管业务的不断拓展，传统的硬编码开发模式难以满足频繁变化的监管指标和报表需求。",
+      highlights: [
+        { title: "指标灵活配置", desc: "业务人员可通过设计器自行调整监管指标和展示维度，无需研发介入。" },
+        { title: "多终端自动适配", desc: "实现“一次PC设计 → 自动转为移动样式”，大幅降低多端开发成本。" },
+        { title: "全景监管视图", desc: "构建从宏观态势到微观详情的穿透式监管视图。" }
+      ]
+    }
   },
   {
+    id: "gas-supervision",
     title: "智慧燃气监管平台",
     industry: "数字建筑",
     tag: "中/小屏场景",
     gradient: "from-teal-400 to-cyan-500",
     desc: "业务诊断预警中心，低代码配置燃气预警，大幅降低开发与交付成本，提高项目毛利率。",
-    metrics: "提升全生命周期效能"
+    metrics: "提升全生命周期效能",
+    details: {
+      background: "城市燃气管网庞大，安全隐患排查困难。需要一套高效的系统来实时监控管网状态并进行风险预警。",
+      highlights: [
+        { title: "预警规则低代码化", desc: "通过动作流和规则引擎，低代码配置复杂的燃气泄漏、压力异常预警逻辑。" },
+        { title: "中/小屏协同", desc: "中屏用于监控中心全局调度，小屏用于外勤人员接单与现场处置。" },
+        { title: "高效交付与复用", desc: "沉淀燃气行业标准组件与模板，提升后续类似项目的交付效率与毛利率。" }
+      ]
+    }
   }
 ];
 
@@ -225,9 +279,10 @@ const ActionIcon = ({ name, className }: { name: string, className?: string }) =
 };
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'cases' | 'product'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'cases' | 'product' | 'solution'>('home');
   const [activeCategory, setActiveCategory] = useState('全部');
   const [activeProductId, setActiveProductId] = useState<string | null>(null);
+  const [activeSolutionId, setActiveSolutionId] = useState<string | null>(null);
   const [isBusinessModalOpen, setIsBusinessModalOpen] = useState(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
 
@@ -256,6 +311,8 @@ export default function App() {
               </>
             ) : currentPage === 'cases' ? (
               <span className="text-blue-600">行业案例</span>
+            ) : currentPage === 'solution' ? (
+              <span className="text-blue-600">解决方案详情</span>
             ) : (
               <span className="text-blue-600">产品详情</span>
             )}
@@ -443,7 +500,15 @@ export default function App() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {allCases.slice(0, 3).map((scenario, index) => (
-            <div key={index} className="group rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300">
+            <div 
+              key={index} 
+              onClick={() => {
+                setActiveSolutionId(scenario.id);
+                setCurrentPage('solution');
+                window.scrollTo(0, 0);
+              }}
+              className="group rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300"
+            >
               <div className={`h-48 bg-gradient-to-br ${scenario.gradient} p-6 flex flex-col justify-between relative overflow-hidden`}>
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300"></div>
                 <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
@@ -495,7 +560,15 @@ export default function App() {
           {/* Cases Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredCases.map((scenario, index) => (
-              <div key={index} className="group bg-white rounded-2xl overflow-hidden cursor-pointer shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+              <div 
+                key={index} 
+                onClick={() => {
+                  setActiveSolutionId(scenario.id);
+                  setCurrentPage('solution');
+                  window.scrollTo(0, 0);
+                }}
+                className="group bg-white rounded-2xl overflow-hidden cursor-pointer shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
+              >
                 <div className={`h-48 bg-gradient-to-br ${scenario.gradient} p-6 flex flex-col justify-between relative overflow-hidden`}>
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300"></div>
                   <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
@@ -538,6 +611,96 @@ export default function App() {
               <p className="text-gray-500">该行业分类下暂无公开的客户案例</p>
             </div>
           )}
+        </div>
+      ) : currentPage === 'solution' && activeSolutionId ? (
+        <div className="pt-32 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen animate-in fade-in duration-500">
+          {(() => {
+            const activeSolutionData = allCases.find(s => s.id === activeSolutionId);
+            if (!activeSolutionData || !activeSolutionData.details) return null;
+            return (
+              <>
+                <div className="mb-8">
+                  <button onClick={() => setCurrentPage('cases')} className="inline-flex items-center text-gray-500 hover:text-blue-600 mb-8 transition-colors font-medium text-sm">
+                    <ArrowLeft className="w-4 h-4 mr-2" /> 返回案例列表
+                  </button>
+                  
+                  <div className={`rounded-3xl bg-gradient-to-br ${activeSolutionData.gradient} p-10 md:p-16 relative overflow-hidden shadow-lg mb-12`}>
+                    <div className="absolute inset-0 bg-black/10"></div>
+                    <div className="absolute -right-20 -top-20 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+                    <div className="relative z-10">
+                      <div className="flex gap-3 mb-6">
+                        <span className="inline-flex px-4 py-1.5 bg-white/20 backdrop-blur-md text-white text-sm font-medium rounded-full border border-white/20">
+                          {activeSolutionData.tag}
+                        </span>
+                        <span className="inline-flex px-4 py-1.5 bg-black/20 backdrop-blur-md text-white text-sm font-medium rounded-full">
+                          {activeSolutionData.industry}
+                        </span>
+                      </div>
+                      <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">{activeSolutionData.title}</h1>
+                      <p className="text-white/90 text-lg md:text-xl max-w-3xl leading-relaxed">
+                        {activeSolutionData.desc}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                  <div className="lg:col-span-2 space-y-12">
+                    <section>
+                      <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                        <span className="w-1.5 h-6 bg-blue-600 rounded-full mr-3"></span>
+                        项目背景与挑战
+                      </h2>
+                      <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm text-gray-600 leading-relaxed text-lg">
+                        {activeSolutionData.details.background}
+                      </div>
+                    </section>
+
+                    <section>
+                      <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                        <span className="w-1.5 h-6 bg-blue-600 rounded-full mr-3"></span>
+                        解决方案亮点
+                      </h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {activeSolutionData.details.highlights.map((hl, idx) => (
+                          <div key={idx} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+                            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-5 group-hover:bg-blue-600 transition-colors duration-300">
+                              <CheckCircle className="w-6 h-6 text-blue-600 group-hover:text-white transition-colors duration-300" />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-3">{hl.title}</h3>
+                            <p className="text-gray-600 leading-relaxed">{hl.desc}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  </div>
+
+                  <div className="lg:col-span-1">
+                    <div className="bg-gradient-to-b from-blue-50 to-white p-8 rounded-3xl border border-blue-100 sticky top-24">
+                      <h3 className="text-xl font-bold text-gray-900 mb-6">核心业务价值</h3>
+                      <div className="flex items-center gap-4 mb-8">
+                        <div className="w-14 h-14 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-600/30">
+                          <TrendingUp className="w-7 h-7 text-white" />
+                        </div>
+                        <div>
+                          <div className="text-sm text-gray-500 font-medium mb-1">关键指标提升</div>
+                          <div className="text-2xl font-bold text-blue-600">{activeSolutionData.metrics}</div>
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                        <button onClick={() => setIsBusinessModalOpen(true)} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-colors shadow-sm shadow-blue-600/20">
+                          获取完整解决方案
+                        </button>
+                        <button onClick={() => setIsBusinessModalOpen(true)} className="w-full py-4 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 rounded-xl font-medium transition-colors">
+                          预约产品演示
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            );
+          })()}
         </div>
       ) : currentPage === 'product' && activeProductId ? (
         <div className="pt-32 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen animate-in fade-in duration-500">
