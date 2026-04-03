@@ -36,7 +36,9 @@ import {
   Plus,
   Trash2,
   Save,
-  ChevronDown
+  ChevronDown,
+  Video,
+  RefreshCw
 } from 'lucide-react';
 
 const products = [
@@ -296,6 +298,7 @@ export default function App() {
   const [activeCategory, setActiveCategory] = useState('全部');
   const [activeProductId, setActiveProductId] = useState<string | null>(null);
   const [activeSolutionId, setActiveSolutionId] = useState<string | null>(null);
+  const [activeManualProduct, setActiveManualProduct] = useState<any>(null);
   const [isBusinessModalOpen, setIsBusinessModalOpen] = useState(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   
@@ -469,15 +472,21 @@ export default function App() {
               <div className="flex flex-wrap gap-2 mt-auto pt-6 border-t border-gray-50">
                 {product.actions?.map((action, i) => {
                   const link = product.actionLinks?.[action];
+                  const isManual = action === '操作手册';
                   return (
                     <a 
                       key={i} 
-                      href={link || '#'}
-                      target={link ? "_blank" : undefined}
-                      rel={link ? "noopener noreferrer" : undefined}
+                      href={isManual ? '#' : (link || '#')}
+                      target={isManual ? undefined : (link ? "_blank" : undefined)}
+                      rel={isManual ? undefined : (link ? "noopener noreferrer" : undefined)}
                       onClick={(e) => {
-                        if (!link) e.preventDefault();
+                        e.preventDefault();
                         e.stopPropagation();
+                        if (isManual) {
+                          setActiveManualProduct(product);
+                        } else if (link) {
+                          window.open(link, '_blank', 'noopener,noreferrer');
+                        }
                       }}
                       className="inline-flex items-center px-3 py-1.5 border border-gray-200 rounded-lg text-[13px] font-medium text-gray-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all duration-200"
                     >
@@ -938,45 +947,207 @@ export default function App() {
                 />
               </div>
               {editingItem._type === 'products' && (
-                <details className="group border border-gray-200 rounded-xl bg-gray-50 overflow-hidden">
-                  <summary className="px-4 py-3 font-medium text-gray-700 cursor-pointer select-none flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
-                    操作按钮链接配置
-                    <ChevronDown className="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform" />
-                  </summary>
-                  <div className="p-4 bg-white border-t border-gray-200 space-y-4">
-                    {['演示地址', '操作手册', '产品履历', '白皮书', '开发指南'].map(actionName => (
-                      <div key={actionName}>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">{actionName}</label>
-                        <input 
-                          type="text" 
-                          value={editingItem.actionLinks?.[actionName] || ''}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            const newLinks = {
-                              ...(editingItem.actionLinks || {}),
-                              [actionName]: val
-                            };
-                            
-                            let newActions = [...(editingItem.actions || [])];
-                            if (val && !newActions.includes(actionName)) {
-                              newActions.push(actionName);
-                            } else if (!val && newActions.includes(actionName)) {
-                              newActions = newActions.filter(a => a !== actionName);
-                            }
-                            
-                            setEditingItem({
-                              ...editingItem,
-                              actionLinks: newLinks,
-                              actions: newActions
-                            });
-                          }}
-                          placeholder={`请输入${actionName}链接`}
-                          className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
-                        />
+                <>
+                  <details className="group border border-gray-200 rounded-xl bg-gray-50 overflow-hidden">
+                    <summary className="px-4 py-3 font-medium text-gray-700 cursor-pointer select-none flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                      操作按钮链接配置
+                      <ChevronDown className="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform" />
+                    </summary>
+                    <div className="p-4 bg-white border-t border-gray-200 space-y-4">
+                      {['演示地址', '操作手册', '产品履历', '白皮书', '开发指南'].map(actionName => (
+                        <div key={actionName}>
+                          <label className="block text-sm font-medium text-gray-700 mb-1.5">{actionName}</label>
+                          <input 
+                            type="text" 
+                            value={editingItem.actionLinks?.[actionName] || ''}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              const newLinks = {
+                                ...(editingItem.actionLinks || {}),
+                                [actionName]: val
+                              };
+                              
+                              let newActions = [...(editingItem.actions || [])];
+                              if (val && !newActions.includes(actionName)) {
+                                newActions.push(actionName);
+                              } else if (!val && newActions.includes(actionName)) {
+                                newActions = newActions.filter(a => a !== actionName);
+                              }
+                              
+                              setEditingItem({
+                                ...editingItem,
+                                actionLinks: newLinks,
+                                actions: newActions
+                              });
+                            }}
+                            placeholder={`请输入${actionName}链接`}
+                            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </details>
+
+                  <details className="group border border-gray-200 rounded-xl bg-gray-50 overflow-hidden">
+                    <summary className="px-4 py-3 font-medium text-gray-700 cursor-pointer select-none flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                      操作手册与视频管理
+                      <ChevronDown className="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform" />
+                    </summary>
+                    <div className="p-4 bg-white border-t border-gray-200 space-y-6">
+                      {/* Manuals */}
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <label className="block text-sm font-medium text-gray-700">操作手册列表</label>
+                          <button 
+                            onClick={() => {
+                              const newManuals = [...(editingItem.manuals || []), { title: '', date: new Date().toISOString().split('T')[0], link: '' }];
+                              setEditingItem({ ...editingItem, manuals: newManuals });
+                            }}
+                            className="text-xs text-blue-600 hover:text-blue-800 flex items-center"
+                          >
+                            <Plus className="w-3 h-3 mr-1" /> 添加手册
+                          </button>
+                        </div>
+                        <div className="space-y-3">
+                          {(editingItem.manuals || []).map((manual: any, idx: number) => (
+                            <div key={idx} className="flex items-start gap-2 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                              <div className="flex-1 space-y-2">
+                                <input 
+                                  type="text" placeholder="手册名称" value={manual.title}
+                                  onChange={(e) => {
+                                    const newManuals = [...editingItem.manuals];
+                                    newManuals[idx].title = e.target.value;
+                                    setEditingItem({ ...editingItem, manuals: newManuals });
+                                  }}
+                                  className="w-full px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 outline-none"
+                                />
+                                <div className="flex gap-2">
+                                  <input 
+                                    type="date" value={manual.date}
+                                    onChange={(e) => {
+                                      const newManuals = [...editingItem.manuals];
+                                      newManuals[idx].date = e.target.value;
+                                      setEditingItem({ ...editingItem, manuals: newManuals });
+                                    }}
+                                    className="w-1/3 px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 outline-none"
+                                  />
+                                  <input 
+                                    type="text" placeholder="下载/查看链接" value={manual.link}
+                                    onChange={(e) => {
+                                      const newManuals = [...editingItem.manuals];
+                                      newManuals[idx].link = e.target.value;
+                                      setEditingItem({ ...editingItem, manuals: newManuals });
+                                    }}
+                                    className="flex-1 px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 outline-none"
+                                  />
+                                </div>
+                              </div>
+                              <button 
+                                onClick={() => {
+                                  const newManuals = [...editingItem.manuals];
+                                  newManuals.splice(idx, 1);
+                                  setEditingItem({ ...editingItem, manuals: newManuals });
+                                }}
+                                className="p-1.5 text-red-500 hover:bg-red-50 rounded-md transition-colors mt-1"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ))}
+                          {!(editingItem.manuals?.length > 0) && <div className="text-sm text-gray-400 text-center py-2">暂无手册</div>}
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                </details>
+
+                      {/* Videos */}
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <label className="block text-sm font-medium text-gray-700">操作视频列表</label>
+                          <button 
+                            onClick={() => {
+                              const newVideos = [...(editingItem.videos || []), { title: '', date: new Date().toISOString().split('T')[0], link: '' }];
+                              setEditingItem({ ...editingItem, videos: newVideos });
+                            }}
+                            className="text-xs text-blue-600 hover:text-blue-800 flex items-center"
+                          >
+                            <Plus className="w-3 h-3 mr-1" /> 添加视频
+                          </button>
+                        </div>
+                        <div className="space-y-3">
+                          {(editingItem.videos || []).map((video: any, idx: number) => (
+                            <div key={idx} className="flex items-start gap-2 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                              <div className="flex-1 space-y-2">
+                                <input 
+                                  type="text" placeholder="视频名称" value={video.title}
+                                  onChange={(e) => {
+                                    const newVideos = [...editingItem.videos];
+                                    newVideos[idx].title = e.target.value;
+                                    setEditingItem({ ...editingItem, videos: newVideos });
+                                  }}
+                                  className="w-full px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 outline-none"
+                                />
+                                <div className="flex gap-2">
+                                  <input 
+                                    type="date" value={video.date}
+                                    onChange={(e) => {
+                                      const newVideos = [...editingItem.videos];
+                                      newVideos[idx].date = e.target.value;
+                                      setEditingItem({ ...editingItem, videos: newVideos });
+                                    }}
+                                    className="w-1/3 px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 outline-none"
+                                  />
+                                  <input 
+                                    type="text" placeholder="观看链接" value={video.link}
+                                    onChange={(e) => {
+                                      const newVideos = [...editingItem.videos];
+                                      newVideos[idx].link = e.target.value;
+                                      setEditingItem({ ...editingItem, videos: newVideos });
+                                    }}
+                                    className="flex-1 px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 outline-none"
+                                  />
+                                </div>
+                              </div>
+                              <button 
+                                onClick={() => {
+                                  const newVideos = [...editingItem.videos];
+                                  newVideos.splice(idx, 1);
+                                  setEditingItem({ ...editingItem, videos: newVideos });
+                                }}
+                                className="p-1.5 text-red-500 hover:bg-red-50 rounded-md transition-colors mt-1"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ))}
+                          {!(editingItem.videos?.length > 0) && <div className="text-sm text-gray-400 text-center py-2">暂无视频</div>}
+                        </div>
+                      </div>
+
+                      {/* Meta */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1.5">产品版本号</label>
+                          <input 
+                            type="text" 
+                            value={editingItem.version || ''}
+                            onChange={(e) => setEditingItem({...editingItem, version: e.target.value})}
+                            placeholder="例如：8.0.50.30"
+                            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1.5">联系人</label>
+                          <input 
+                            type="text" 
+                            value={editingItem.contact || ''}
+                            onChange={(e) => setEditingItem({...editingItem, contact: e.target.value})}
+                            placeholder="例如：张琳瑶"
+                            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                </>
               )}
               {editingItem._type === 'cases' && (
                 <>
@@ -1153,6 +1324,111 @@ export default function App() {
       </footer>
 
       {/* Modals */}
+      {activeManualProduct && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-gray-900/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl shadow-2xl shadow-blue-900/10 w-full max-w-5xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh] border border-gray-100">
+            {/* Header */}
+            <div className="px-8 py-6 flex justify-between items-center border-b border-gray-100 bg-white/50 backdrop-blur-xl sticky top-0 z-20">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center border border-blue-100/50">
+                  <BookOpen className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">{activeManualProduct.title}</h3>
+                  <p className="text-sm text-gray-500 mt-0.5">操作手册与视频教程</p>
+                </div>
+              </div>
+              <button onClick={() => setActiveManualProduct(null)} className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            {/* Content */}
+            <div className="p-8 overflow-y-auto flex-1 bg-gray-50/30">
+              {/* Manuals Section */}
+              <div className="mb-12">
+                <div className="flex items-center gap-2 mb-6">
+                  <div className="w-1.5 h-5 bg-blue-600 rounded-full"></div>
+                  <h4 className="text-lg font-bold text-gray-900">操作手册</h4>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {activeManualProduct.manuals && activeManualProduct.manuals.length > 0 ? (
+                    activeManualProduct.manuals.map((manual: any, idx: number) => (
+                      <a key={idx} href={manual.link || '#'} target="_blank" rel="noopener noreferrer" className="group flex flex-col bg-white rounded-2xl border border-gray-200/80 p-5 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300 cursor-pointer">
+                        <div className="flex items-start gap-4 mb-4">
+                          <div className="w-12 h-12 rounded-xl bg-blue-50/80 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-600 transition-colors duration-300">
+                            <FileText className="w-6 h-6 text-blue-600 group-hover:text-white transition-colors duration-300" />
+                          </div>
+                          <h5 className="text-sm font-semibold text-gray-800 leading-snug group-hover:text-blue-600 transition-colors line-clamp-2">{manual.title}</h5>
+                        </div>
+                        <div className="mt-auto flex items-center justify-between pt-4 border-t border-gray-50">
+                          <span className="text-xs font-medium text-gray-400 flex items-center"><History className="w-3.5 h-3.5 mr-1.5" /> {manual.date}</span>
+                          <span className="flex items-center text-sm font-medium text-blue-600 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                            查看文档 <ChevronRight className="w-4 h-4 ml-0.5" />
+                          </span>
+                        </div>
+                      </a>
+                    ))
+                  ) : (
+                    <div className="col-span-full flex flex-col items-center justify-center py-12 bg-white rounded-2xl border border-gray-100 border-dashed">
+                      <BookOpen className="w-8 h-8 text-gray-300 mb-3" />
+                      <p className="text-sm text-gray-500">暂无操作手册</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Videos Section */}
+              <div>
+                <div className="flex items-center gap-2 mb-6">
+                  <div className="w-1.5 h-5 bg-indigo-500 rounded-full"></div>
+                  <h4 className="text-lg font-bold text-gray-900">操作视频</h4>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {activeManualProduct.videos && activeManualProduct.videos.length > 0 ? (
+                    activeManualProduct.videos.map((video: any, idx: number) => (
+                      <a key={idx} href={video.link || '#'} target="_blank" rel="noopener noreferrer" className="group flex flex-col bg-white rounded-2xl border border-gray-200/80 p-5 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-500/5 transition-all duration-300 cursor-pointer">
+                        <div className="flex items-start gap-4 mb-4">
+                          <div className="w-12 h-12 rounded-xl bg-indigo-50/80 flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-500 transition-colors duration-300">
+                            <Play className="w-6 h-6 text-indigo-500 group-hover:text-white transition-colors duration-300 ml-0.5" />
+                          </div>
+                          <h5 className="text-sm font-semibold text-gray-800 leading-snug group-hover:text-indigo-600 transition-colors line-clamp-2">{video.title}</h5>
+                        </div>
+                        <div className="mt-auto flex items-center justify-between pt-4 border-t border-gray-50">
+                          <span className="text-xs font-medium text-gray-400 flex items-center"><History className="w-3.5 h-3.5 mr-1.5" /> {video.date}</span>
+                          <span className="flex items-center text-sm font-medium text-indigo-600 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                            观看视频 <ChevronRight className="w-4 h-4 ml-0.5" />
+                          </span>
+                        </div>
+                      </a>
+                    ))
+                  ) : (
+                    <div className="col-span-full flex flex-col items-center justify-center py-12 bg-white rounded-2xl border border-gray-100 border-dashed">
+                      <Video className="w-8 h-8 text-gray-300 mb-3" />
+                      <p className="text-sm text-gray-500">暂无操作视频</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="bg-white px-8 py-5 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-2 text-sm text-gray-500">
+                <User className="w-4 h-4" />
+                <span>如有问题请联系：<span className="font-medium text-gray-700">{activeManualProduct.contact || '管理员'}</span></span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-400">产品版本</span>
+                <span className="px-2.5 py-1 bg-gray-100 text-gray-600 text-xs font-mono font-medium rounded-md">
+                  v{activeManualProduct.version || '1.0.0.0'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {isBusinessModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
