@@ -852,6 +852,7 @@ export default function App() {
                     <tr>
                       <th className="px-6 py-4 font-semibold">标题</th>
                       <th className="px-6 py-4 font-semibold">描述</th>
+                      {consoleTab === 'cases' && <th className="px-6 py-4 font-semibold">行业分类</th>}
                       <th className="px-6 py-4 font-semibold text-right">操作</th>
                     </tr>
                   </thead>
@@ -860,7 +861,14 @@ export default function App() {
                       <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
                         <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{item.title}</td>
                         <td className="px-6 py-4 max-w-md truncate">{item.description || item.desc}</td>
-                        <td className="px-6 py-4 text-right">
+                        {consoleTab === 'cases' && (
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+                              {item.industry}
+                            </span>
+                          </td>
+                        )}
+                        <td className="px-6 py-4 text-right whitespace-nowrap">
                           <button 
                             onClick={() => setEditingItem({ ...item, _index: idx, _type: consoleTab })}
                             className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium mr-4"
