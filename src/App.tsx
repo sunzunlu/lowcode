@@ -126,7 +126,7 @@ const capabilities = [
   {
     title: "工作流引擎",
     icon: Workflow,
-    description: "基于 BPMN 2.0 标准，提供可视化流程设计器，支持复杂审批流、业务流转与自动化任务编排。"
+    description: "自主研发的可视化流程设计器，支持复杂审批流、业务流转与自动化任务编排。针对政务及企业场景深度优化，提供材料、角色、权限、节点等要素的灵活低代码配置能力，实现业务流程快速建模与高效执行，大幅提升开发与交付效率。"
   },
    {
     title: "动作流",
@@ -158,72 +158,56 @@ const capabilities = [
 
 const allCases = [
   {
-    title: "智慧城市指挥中心",
-    industry: "政务",
-    tag: "大屏场景",
+    title: "交易移动商城",
+    industry: "智慧招采",
+    tag: "小屏场景",
     gradient: "from-blue-500 to-cyan-400",
-    desc: "整合城市交通、安防、环境等多维数据，实现一屏统管与高效决策。",
-    metrics: "响应效率提升 40%"
+    desc: "支持投标人/供应商的移动端操作（如移动CA认证、标书查看、电子签章等），支持“不见面”交易全流程移动化。",
+    metrics: "降低定制开发成本"
   },
   {
-    title: "企业内部 ERP 系统",
-    industry: "制造",
-    tag: "中屏场景",
+    title: "政务服务领导驾驶舱",
+    industry: "智慧政务",
+    tag: "中/小屏场景",
     gradient: "from-purple-500 to-indigo-500",
-    desc: "打通生产、库存、销售环节，实现业务流程全链路数字化与可视化。",
-    metrics: "开发周期缩短 60%"
+    desc: "领导/管理人员通过手机/平板随时查看政务数据，政务大厅展示实时数据驾驶舱、业务专题。",
+    metrics: "提升项目交付效率"
   },
   {
-    title: "现场巡检移动助手",
-    industry: "能源",
-    tag: "小屏场景",
+    title: "建筑数据分析平台",
+    industry: "数字建筑",
+    tag: "多端联动",
     gradient: "from-emerald-400 to-teal-500",
-    desc: "支持离线表单、扫码、拍照，规范一线人员巡检作业流程。",
-    metrics: "数据准确率 99%"
+    desc: "融合大中小屏，实现工程建设全生命周期数据可视化，支持物联网实时感知、BIM数据融合、AI预警等。",
+    metrics: "数据互通与实时协同"
   },
   {
-    title: "全渠道营销分析罗盘",
-    industry: "零售",
-    tag: "大屏场景",
-    gradient: "from-orange-400 to-pink-500",
-    desc: "实时监控各渠道销售转化漏斗，为精准营销决策提供数据支撑。",
-    metrics: "转化率提升 15%"
-  },
-  {
-    title: "信贷审批工作流",
-    industry: "金融",
-    tag: "表单场景",
-    gradient: "from-blue-600 to-indigo-600",
-    desc: "复杂的条件分支与多级审批，集成 OCR 自动识别，提升审批效率。",
-    metrics: "审批时间缩短 3 天"
-  },
-  {
-    title: "智慧医院导诊大屏",
-    industry: "医疗",
-    tag: "大屏场景",
-    gradient: "from-teal-400 to-cyan-500",
-    desc: "实时展示科室排队情况、医生排班，优化患者就医体验。",
-    metrics: "排队时间减少 20%"
-  },
-  {
-    title: "供应商协同门户",
-    industry: "制造",
-    tag: "中屏场景",
-    gradient: "from-slate-500 to-gray-700",
-    desc: "实现采购订单、发货、对账全流程在线协同，降低企业间沟通成本。",
-    metrics: "协同效率提升 50%"
-  },
-  {
-    title: "设备报修小程序",
-    industry: "物业",
+    title: "智慧住建业务系统",
+    industry: "数字建筑",
     tag: "小屏场景",
-    gradient: "from-amber-400 to-orange-500",
-    desc: "业主一键报修，维修工单自动派发，服务进度实时追踪与评价。",
-    metrics: "客户满意度 98%"
+    gradient: "from-orange-400 to-pink-500",
+    desc: "移动端监管APP或小程序，支持住建主管部门/企业现场人员进行数据上报、巡检、监管、查询等。",
+    metrics: "助力监管框架落地"
+  },
+  {
+    title: "数字化监管系统",
+    industry: "智慧政务",
+    tag: "小屏场景",
+    gradient: "from-blue-600 to-indigo-600",
+    desc: "移动端咨询详情、办事指南、数据统计等小屏场景，实现“一次PC设计 → 自动转为移动样式”。",
+    metrics: "多终端自动适配"
+  },
+  {
+    title: "智慧燃气监管平台",
+    industry: "数字建筑",
+    tag: "中/小屏场景",
+    gradient: "from-teal-400 to-cyan-500",
+    desc: "业务诊断预警中心，低代码配置燃气预警，大幅降低开发与交付成本，提高项目毛利率。",
+    metrics: "提升全生命周期效能"
   }
 ];
 
-const categories = ["全部", "政务", "制造", "零售", "金融", "医疗", "能源", "物业"];
+const categories = ["全部", "智慧招采", "智慧政务", "数字建筑"];
 
 const ActionIcon = ({ name, className }: { name: string, className?: string }) => {
   switch (name) {
