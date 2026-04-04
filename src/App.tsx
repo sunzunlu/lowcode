@@ -306,6 +306,7 @@ export default function App() {
   const [activeDemoTab, setActiveDemoTab] = useState<number>(0);
   const [isBusinessModalOpen, setIsBusinessModalOpen] = useState(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+  const [isFreeTrialModalOpen, setIsFreeTrialModalOpen] = useState(false);
   
   // Console states
   const [consoleTab, setConsoleTab] = useState<'products' | 'capabilities' | 'cases'>('products');
@@ -352,7 +353,10 @@ export default function App() {
             >
               登录控制台
             </button>
-            <button className="text-sm font-medium bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 shadow-sm shadow-blue-600/20 transition-all active:scale-95">
+            <button 
+              onClick={() => setIsFreeTrialModalOpen(true)}
+              className="text-sm font-medium bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 shadow-sm shadow-blue-600/20 transition-all active:scale-95"
+            >
               免费试用
             </button>
           </div>
@@ -1729,6 +1733,143 @@ export default function App() {
                 <span className="px-2.5 py-1 bg-gray-100 text-gray-600 text-xs font-mono font-medium rounded-md">
                   v{activeManualProduct.version || '1.0.0.0'}
                 </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isFreeTrialModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-gray-100/90 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
+          <div className="relative w-full max-w-5xl my-auto">
+            <button 
+              onClick={() => setIsFreeTrialModalOpen(false)} 
+              className="absolute -top-12 right-0 p-2 text-gray-500 hover:text-gray-900 bg-white/50 hover:bg-white rounded-full transition-all"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-blue-600">免费体验产品</h2>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/50 overflow-hidden flex flex-col md:flex-row">
+              {/* Left Column - Form */}
+              <div className="flex-1 p-8 md:p-10 border-b md:border-b-0 md:border-r border-gray-100">
+                <h3 className="text-xl font-bold text-gray-900 mb-6">请填写信息</h3>
+                
+                <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500">*</span>
+                        <input type="text" placeholder="姓名" className="w-full pl-6 pr-4 py-2.5 bg-white border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-sm transition-all" />
+                      </div>
+                    </div>
+                    <div>
+                      <input type="text" placeholder="公司名称" className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-sm transition-all" />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-red-500">*</span>
+                        <input type="tel" placeholder="手机" className="w-full pl-6 pr-4 py-2.5 bg-white border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-sm transition-all" />
+                      </div>
+                    </div>
+                    <div>
+                      <input type="email" placeholder="电子邮箱" className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-sm transition-all" />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div className="flex gap-2">
+                      <input type="text" placeholder="验证码" className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-sm transition-all" />
+                      <button type="button" className="px-4 py-2.5 bg-gray-100 text-gray-600 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors whitespace-nowrap">
+                        获取验证码
+                      </button>
+                    </div>
+                    <div>
+                      <div className="relative">
+                        <select className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-sm transition-all appearance-none text-gray-500">
+                          <option value="" disabled selected>企业规模</option>
+                          <option value="1-49">1-49人</option>
+                          <option value="50-99">50-99人</option>
+                          <option value="100-499">100-499人</option>
+                          <option value="500-999">500-999人</option>
+                          <option value="1000+">1000人以上</option>
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <textarea 
+                      placeholder="需求描述" 
+                      rows={4}
+                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-sm transition-all resize-none"
+                    ></textarea>
+                  </div>
+新点
+                  <div className="space-y-3 pt-2">
+                    <label className="flex items-start gap-2 cursor-pointer group">
+                      <div className="relative flex items-center justify-center mt-0.5">
+                        <input type="checkbox" className="peer appearance-none w-4 h-4 border border-gray-300 rounded-sm checked:bg-blue-600 checked:border-blue-600 transition-colors cursor-pointer" />
+                        <CheckCircle className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 pointer-events-none" />
+                      </div>
+                      <span className="text-sm text-gray-500 group-hover:text-gray-700 transition-colors">我愿意接收新点发来的行业最新动态的简讯</span>
+                    </label>
+                    <label className="flex items-start gap-2 cursor-pointer group">
+                      <div className="relative flex items-center justify-center mt-0.5">
+                        <input type="checkbox" className="peer appearance-none w-4 h-4 border border-gray-300 rounded-sm checked:bg-blue-600 checked:border-blue-600 transition-colors cursor-pointer" />
+                        <CheckCircle className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 pointer-events-none" />
+                      </div>
+                      <span className="text-sm text-gray-500 group-hover:text-gray-700 transition-colors">选中此框，即表示我已阅读并同意《新点中国隐私政策》</span>
+                    </label>
+                  </div>
+
+                  <div className="pt-4">
+                    <button type="submit" className="px-8 py-2.5 bg-[#0084ff] text-white rounded-md text-sm font-medium hover:bg-blue-600 transition-colors shadow-sm shadow-blue-500/20">
+                      立即体验
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              {/* Right Column - Info */}
+              <div className="w-full md:w-[320px] p-8 md:p-10 bg-white flex flex-col">
+                <h3 className="text-xl font-bold text-gray-900 mb-6">已经注册？</h3>
+                
+                <button className="w-full py-2.5 bg-[#0084ff] text-white rounded-md text-sm font-medium hover:bg-blue-600 transition-colors shadow-sm shadow-blue-500/20 mb-10">
+                  登录
+                </button>
+
+                <div className="space-y-6 mt-auto">
+                  <div className="text-sm text-gray-600 leading-relaxed">
+                    您也可以<br />
+                    致电 <span className="text-[#0084ff] font-medium">4008-830-830</span>
+                  </div>
+
+                  <div className="text-sm text-gray-600 leading-relaxed">
+                    或者扫码添加微信咨询<br />产品
+                  </div>
+
+                  <div className="w-32 h-32 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center p-2">
+                    {/* Placeholder for QR Code */}
+                    <div className="w-full h-full border-2 border-dashed border-gray-300 rounded flex flex-col items-center justify-center text-gray-400 gap-2">
+                      <div className="relative">
+                        <div className="w-16 h-16 border-4 border-gray-300 rounded-sm"></div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
