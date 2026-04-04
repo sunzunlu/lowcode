@@ -41,7 +41,10 @@ import {
   RefreshCw,
   Copy,
   ExternalLink,
-  MonitorPlay
+  MonitorPlay,
+  MessageCircle,
+  Headphones,
+  ClipboardList
 } from 'lucide-react';
 
 const products = [
@@ -1487,6 +1490,70 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Floating Sidebar */}
+      <div className="fixed right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4">
+        {/* Online Consultation */}
+        <div className="bg-white rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] py-3 px-2 flex flex-col items-center gap-1.5 cursor-pointer hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all group">
+          <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-blue-500/20">
+            <img src="https://oa.epoint.com.cn/h5/fileattaches/20260404/1775274283352_08dcce6f/s0f7g4.png" alt="Consultant" className="w-full h-full object-cover" />
+          </div>
+          <span className="text-[13px] font-medium text-gray-700 group-hover:text-blue-600 leading-tight text-center">在线<br/>咨询</span>
+        </div>
+
+        {/* WeChat & After-sales */}
+        <div className="bg-white rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex flex-col overflow-visible relative">
+          {/* WeChat */}
+          <div className="p-3 pb-4 flex flex-col items-center gap-1.5 cursor-pointer border-b border-gray-100 hover:bg-blue-50/50 transition-colors rounded-t-full group relative">
+            <div className="relative">
+              <MessageCircle className="w-6 h-6 text-blue-500" />
+              <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full border border-white"></div>
+            </div>
+            <span className="text-[13px] font-medium text-blue-600 leading-tight text-center">微信<br/>咨询</span>
+            
+            {/* Hover Popup */}
+            <div className="absolute right-full top-0 mr-4 w-[280px] bg-white rounded-2xl shadow-[0_20px_40px_rgb(0,0,0,0.1)] p-8 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-x-4 group-hover:translate-x-0 before:content-[''] before:absolute before:right-[-8px] before:top-8 before:w-4 before:h-4 before:bg-white before:rotate-45 before:shadow-[2px_-2px_2px_rgb(0,0,0,0.02)]">
+              <div className="flex flex-col items-center text-center relative z-10">
+                <div className="w-36 h-36 bg-white border border-gray-100 rounded-xl mb-5 flex items-center justify-center p-2 shadow-sm">
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com" alt="QR Code" className="w-full h-full object-contain opacity-80" />
+                </div>
+                <p className="text-[15px] text-gray-600 mb-1.5">微信咨询一对一沟通</p>
+                <p className="text-[15px] text-gray-600 mb-5">获取<span className="text-gray-900 font-medium">专业</span>解决方案</p>
+                <button className="text-blue-600 text-[15px] font-medium hover:text-blue-700 transition-colors">
+                  预约专家回电
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* After-sales */}
+          <div className="p-3 pt-4 flex flex-col items-center gap-1.5 cursor-pointer hover:bg-gray-50/80 transition-colors rounded-b-full group relative">
+            <Headphones className="w-6 h-6 text-gray-700 group-hover:text-blue-600 transition-colors" />
+            <span className="text-[13px] font-medium text-gray-700 group-hover:text-blue-600 transition-colors leading-tight text-center">售后<br/>服务</span>
+
+            {/* Hover Popup */}
+            <div className="absolute right-full bottom-0 mr-4 w-[280px] bg-white rounded-2xl shadow-[0_20px_40px_rgb(0,0,0,0.1)] p-8 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-x-4 group-hover:translate-x-0 before:content-[''] before:absolute before:right-[-8px] before:bottom-8 before:w-4 before:h-4 before:bg-white before:rotate-45 before:shadow-[2px_-2px_2px_rgb(0,0,0,0.02)]">
+              <div className="space-y-6 relative z-10">
+                <div className="flex items-start gap-4">
+                  <Phone className="w-5 h-5 text-gray-700 mt-1" />
+                  <div>
+                    <p className="text-[15px] text-gray-600 mb-1.5">售后服务热线</p>
+                    <p className="text-lg font-bold text-gray-900 font-mono tracking-tight">6012|18962289726</p>
+                  </div>
+                </div>
+                <div className="h-px bg-gray-100"></div>
+                <div className="flex items-start gap-4">
+                  <ClipboardList className="w-5 h-5 text-gray-700 mt-1" />
+                  <div>
+                    <p className="text-[15px] text-gray-900 font-medium mb-1.5">工单服务</p>
+                    <p className="text-[14px] text-gray-500 leading-relaxed">获取专业支持，快速<br/>解决问题</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Modals */}
       {activeDemoProduct && (
