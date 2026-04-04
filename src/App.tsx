@@ -44,7 +44,9 @@ import {
   MonitorPlay,
   MessageCircle,
   Headphones,
-  ClipboardList
+  ClipboardList,
+  Volume2,
+  Minus
 } from 'lucide-react';
 
 const products = [
@@ -150,7 +152,7 @@ const capabilities = [
     icon: Workflow,
     description: "自主研发的可视化流程设计器，支持复杂审批流、业务流转与自动化任务编排。针对政务及企业场景深度优化，提供材料、角色、权限、节点等要素的灵活低代码配置能力，实现业务流程快速建模与高效执行，大幅提升开发与交付效率。"
   },
-   {
+  {
     title: "动作流",
     icon: Zap,
     description: "可视化配置前端交互与后端逻辑，支持条件分支、循环与异步调用，灵活编排业务动作。"
@@ -170,7 +172,7 @@ const capabilities = [
     icon: ShieldCheck,
     description: "细粒度的 RBAC 权限控制体系，支持组织架构、角色、菜单权限与行级数据权限多维管控。"
   },
-  
+
   {
     title: "数据集",
     icon: Table,
@@ -310,14 +312,15 @@ export default function App() {
   const [isBusinessModalOpen, setIsBusinessModalOpen] = useState(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   const [isFreeTrialModalOpen, setIsFreeTrialModalOpen] = useState(false);
-  
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   // Console states
   const [consoleTab, setConsoleTab] = useState<'products' | 'capabilities' | 'cases'>('products');
   const [editingItem, setEditingItem] = useState<any>(null);
   const [itemToDelete, setItemToDelete] = useState<{ index: number, type: string } | null>(null);
 
-  const filteredCases = activeCategory === '全部' 
-    ? casesData 
+  const filteredCases = activeCategory === '全部'
+    ? casesData
     : casesData.filter(c => c.industry === activeCategory);
 
   return (
@@ -350,13 +353,13 @@ export default function App() {
             )}
           </div>
           <div className="flex items-center gap-4">
-            <button 
+            <button
               onClick={() => setCurrentPage('console')}
               className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block"
             >
               登录控制台
             </button>
-            <button 
+            <button
               onClick={() => setIsFreeTrialModalOpen(true)}
               className="text-sm font-medium bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 shadow-sm shadow-blue-600/20 transition-all active:scale-95"
             >
@@ -369,247 +372,247 @@ export default function App() {
       {/* Main Content Area */}
       {currentPage === 'home' ? (
         <>
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-b from-[#eef2f6] to-[#fafafa] overflow-hidden pt-32 pb-24">
-        {/* Decorative Background */}
-        <div className="absolute inset-0 z-0 pointer-events-none flex justify-center">
-          <div
-            className="w-[200%] h-[200%] absolute top-[-50%] opacity-[0.08]"
-            style={{
-              backgroundImage: `linear-gradient(to right, #0055ff 1px, transparent 1px), linear-gradient(to bottom, #0055ff 1px, transparent 1px)`,
-              backgroundSize: '4rem 4rem',
-              transform: 'perspective(1000px) rotateX(60deg) translateY(-100px) translateZ(-200px)',
-              transformOrigin: 'top center'
-            }}
-          ></div>
-          <div className="absolute top-0 w-[800px] h-[400px] bg-blue-400/20 blur-[120px] rounded-full mix-blend-multiply"></div>
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-gray-200/60 text-sm text-gray-600 mb-8 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span>
-            Enterprise Low-Code Platform
-          </div>
-          
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
-            低代码平台演示门户
-          </h1>
-          
-          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed">
-            一站式可视化设计与底层流程引擎服务，赋能数字化转型，降低开发门槛，提升交付效率。探索我们的产品矩阵，体验所见即所得的开发模式。
-          </p>
-
-          <div className="flex items-center justify-center gap-4 mb-16">
-            <button className="bg-blue-600 text-white px-8 py-3.5 rounded-xl font-medium hover:bg-blue-700 shadow-lg shadow-blue-600/20 transition-all hover:-translate-y-0.5 flex items-center">
-              <Play className="w-4 h-4 mr-2 fill-current" />
-              观看平台演示
-            </button>
-            <button className="bg-white text-gray-700 border border-gray-200 px-8 py-3.5 rounded-xl font-medium hover:bg-gray-50 hover:border-gray-300 shadow-sm transition-all hover:-translate-y-0.5">
-              查阅开发者文档
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {/* Stat Card 1 */}
-            <div className="bg-white/70 backdrop-blur-md rounded-2xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white flex flex-col items-center justify-center hover:-translate-y-1 transition-transform duration-300">
-              <div className="w-14 h-14 rounded-xl bg-blue-500 text-white flex items-center justify-center mb-5 shadow-lg shadow-blue-500/20">
-                <Monitor className="w-7 h-7" />
-              </div>
-              <div className="text-4xl font-bold text-gray-900 mb-2">5+</div>
-              <div className="text-sm font-medium text-gray-500">可视化设计工具</div>
+          {/* Hero Section */}
+          <div className="relative bg-gradient-to-b from-[#eef2f6] to-[#fafafa] overflow-hidden pt-32 pb-24">
+            {/* Decorative Background */}
+            <div className="absolute inset-0 z-0 pointer-events-none flex justify-center">
+              <div
+                className="w-[200%] h-[200%] absolute top-[-50%] opacity-[0.08]"
+                style={{
+                  backgroundImage: `linear-gradient(to right, #0055ff 1px, transparent 1px), linear-gradient(to bottom, #0055ff 1px, transparent 1px)`,
+                  backgroundSize: '4rem 4rem',
+                  transform: 'perspective(1000px) rotateX(60deg) translateY(-100px) translateZ(-200px)',
+                  transformOrigin: 'top center'
+                }}
+              ></div>
+              <div className="absolute top-0 w-[800px] h-[400px] bg-blue-400/20 blur-[120px] rounded-full mix-blend-multiply"></div>
             </div>
-            
-            {/* Stat Card 2 */}
-            <div className="bg-white/70 backdrop-blur-md rounded-2xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white flex flex-col items-center justify-center hover:-translate-y-1 transition-transform duration-300">
-              <div className="w-14 h-14 rounded-xl bg-blue-500 text-white flex items-center justify-center mb-5 shadow-lg shadow-blue-500/20">
-                <Layers className="w-7 h-7" />
-              </div>
-              <div className="text-4xl font-bold text-gray-900 mb-2">4</div>
-              <div className="text-sm font-medium text-gray-500">底层服务引擎</div>
-            </div>
-            
-            {/* Stat Card 3 */}
-            <div className="bg-white/70 backdrop-blur-md rounded-2xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white flex flex-col items-center justify-center hover:-translate-y-1 transition-transform duration-300">
-              <div className="w-14 h-14 rounded-xl bg-blue-500 text-white flex items-center justify-center mb-5 shadow-lg shadow-blue-500/20">
-                <TrendingUp className="w-7 h-7" />
-              </div>
-              <div className="text-4xl font-bold text-gray-900 mb-2">10x</div>
-              <div className="text-sm font-medium text-gray-500">开发交付提效</div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Products Section */}
-      <div id="products" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        <div className="mb-12 text-center md:text-left">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4 tracking-tight">设计器类产品矩阵</h2>
-          <p className="text-gray-500 text-lg max-w-2xl">核心产品矩阵 — 覆盖从大屏指挥到移动端应用的全场景可视化拖拽式设计，所见即所得。</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {productsData.map((product, index) => (
-            <div 
-              key={index} 
-              onClick={() => {
-                if (product.details) {
-                  setActiveProductId(product.id);
-                  setCurrentPage('product');
-                  window.scrollTo(0, 0);
-                }
-              }}
-              className={`bg-white rounded-2xl border border-gray-100 p-8 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:-translate-y-1 transition-all duration-300 flex flex-col group ${product.details ? 'cursor-pointer' : ''}`}
-            >
-              <div className="flex items-center mb-5">
-                <div className={`w-12 h-12 rounded-xl ${product.iconBg} ${product.iconColor} flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <product.icon className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900">{product.title}</h3>
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+              <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-gray-200/60 text-sm text-gray-600 mb-8 shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span>
+                Enterprise Low-Code Platform
               </div>
-              
-              <p className="text-gray-600 text-[15px] mb-8 flex-grow leading-relaxed">
-                {product.description}
+
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
+                低代码平台演示门户
+              </h1>
+
+              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed">
+                一站式可视化设计与底层流程引擎服务，赋能数字化转型，降低开发门槛，提升交付效率。探索我们的产品矩阵，体验所见即所得的开发模式。
               </p>
 
-              {product.subTags && (
-                 <div className="flex flex-wrap gap-2 mb-8">
-                   {product.subTags.map(tag => (
-                     <span key={tag} className="px-3 py-1.5 bg-gray-50 border border-gray-100 text-gray-600 text-xs font-medium rounded-lg">
-                       {tag}
-                     </span>
-                   ))}
-                 </div>
-              )}
+              <div className="flex items-center justify-center gap-4 mb-16">
+                <button className="bg-blue-600 text-white px-8 py-3.5 rounded-xl font-medium hover:bg-blue-700 shadow-lg shadow-blue-600/20 transition-all hover:-translate-y-0.5 flex items-center">
+                  <Play className="w-4 h-4 mr-2 fill-current" />
+                  观看平台演示
+                </button>
+                <button className="bg-white text-gray-700 border border-gray-200 px-8 py-3.5 rounded-xl font-medium hover:bg-gray-50 hover:border-gray-300 shadow-sm transition-all hover:-translate-y-0.5">
+                  查阅开发者文档
+                </button>
+              </div>
 
-              <div className="flex flex-wrap gap-2 mt-auto pt-6 border-t border-gray-50">
-                {(() => {
-                  const displayActions: string[] = [];
-                  
-                  if (product.demoPlatforms && product.demoPlatforms.length > 0) {
-                    displayActions.push('演示地址');
-                  } else if (product.actions?.includes('演示地址')) {
-                    displayActions.push('演示地址');
-                  }
-                  
-                  if ((product.manuals && product.manuals.length > 0) || (product.videos && product.videos.length > 0)) {
-                    displayActions.push('操作手册');
-                  } else if (product.actions?.includes('操作手册')) {
-                    displayActions.push('操作手册');
-                  }
-                  
-                  product.actions?.forEach(action => {
-                    if (action !== '演示地址' && action !== '操作手册' && !displayActions.includes(action)) {
-                      displayActions.push(action);
-                    }
-                  });
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                {/* Stat Card 1 */}
+                <div className="bg-white/70 backdrop-blur-md rounded-2xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white flex flex-col items-center justify-center hover:-translate-y-1 transition-transform duration-300">
+                  <div className="w-14 h-14 rounded-xl bg-blue-500 text-white flex items-center justify-center mb-5 shadow-lg shadow-blue-500/20">
+                    <Monitor className="w-7 h-7" />
+                  </div>
+                  <div className="text-4xl font-bold text-gray-900 mb-2">5+</div>
+                  <div className="text-sm font-medium text-gray-500">可视化设计工具</div>
+                </div>
 
-                  return displayActions.map((action, i) => {
-                    const link = product.actionLinks?.[action];
-                    const isManual = action === '操作手册';
-                    const isDemo = action === '演示地址';
-                    const isModalAction = isManual || isDemo;
-                    return (
-                      <a 
-                        key={i} 
-                        href={isModalAction ? '#' : (link || '#')}
-                        target={isModalAction ? undefined : (link ? "_blank" : undefined)}
-                        rel={isModalAction ? undefined : (link ? "noopener noreferrer" : undefined)}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          if (isManual) {
-                            setActiveManualProduct(product);
-                          } else if (isDemo) {
-                            setActiveDemoProduct(product);
-                            setActiveDemoTab(0);
-                          } else if (link) {
-                            window.open(link, '_blank', 'noopener,noreferrer');
-                          }
-                        }}
-                        className="inline-flex items-center px-3 py-1.5 border border-gray-200 rounded-lg text-[13px] font-medium text-gray-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all duration-200"
-                      >
-                        <ActionIcon name={action} className="w-3.5 h-3.5 mr-1.5" />
-                        {action}
-                      </a>
-                    );
-                  });
-                })()}
+                {/* Stat Card 2 */}
+                <div className="bg-white/70 backdrop-blur-md rounded-2xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white flex flex-col items-center justify-center hover:-translate-y-1 transition-transform duration-300">
+                  <div className="w-14 h-14 rounded-xl bg-blue-500 text-white flex items-center justify-center mb-5 shadow-lg shadow-blue-500/20">
+                    <Layers className="w-7 h-7" />
+                  </div>
+                  <div className="text-4xl font-bold text-gray-900 mb-2">4</div>
+                  <div className="text-sm font-medium text-gray-500">底层服务引擎</div>
+                </div>
+
+                {/* Stat Card 3 */}
+                <div className="bg-white/70 backdrop-blur-md rounded-2xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white flex flex-col items-center justify-center hover:-translate-y-1 transition-transform duration-300">
+                  <div className="w-14 h-14 rounded-xl bg-blue-500 text-white flex items-center justify-center mb-5 shadow-lg shadow-blue-500/20">
+                    <TrendingUp className="w-7 h-7" />
+                  </div>
+                  <div className="text-4xl font-bold text-gray-900 mb-2">10x</div>
+                  <div className="text-sm font-medium text-gray-500">开发交付提效</div>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Core Capabilities Section */}
-      <div id="capabilities" className="bg-white border-y border-gray-100 py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 tracking-tight">坚实的底层服务引擎</h2>
-            <p className="text-gray-500 text-lg max-w-2xl mx-auto">不仅是前端 UI 的拖拽，我们提供完整的后端逻辑、数据与权限的低代码配置能力。</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {capabilitiesData.map((cap, index) => (
-              <div key={index} className="flex p-6 rounded-2xl hover:bg-gray-50 transition-colors duration-300 border border-transparent hover:border-gray-100">
-                <div className="flex-shrink-0 mr-6">
-                  <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
-                    <cap.icon className="w-7 h-7" />
+          {/* Products Section */}
+          <div id="products" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+            <div className="mb-12 text-center md:text-left">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4 tracking-tight">设计器类产品矩阵</h2>
+              <p className="text-gray-500 text-lg max-w-2xl">核心产品矩阵 — 覆盖从大屏指挥到移动端应用的全场景可视化拖拽式设计，所见即所得。</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {productsData.map((product, index) => (
+                <div
+                  key={index}
+                  onClick={() => {
+                    if (product.details) {
+                      setActiveProductId(product.id);
+                      setCurrentPage('product');
+                      window.scrollTo(0, 0);
+                    }
+                  }}
+                  className={`bg-white rounded-2xl border border-gray-100 p-8 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 hover:-translate-y-1 transition-all duration-300 flex flex-col group ${product.details ? 'cursor-pointer' : ''}`}
+                >
+                  <div className="flex items-center mb-5">
+                    <div className={`w-12 h-12 rounded-xl ${product.iconBg} ${product.iconColor} flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <product.icon className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900">{product.title}</h3>
+                  </div>
+
+                  <p className="text-gray-600 text-[15px] mb-8 flex-grow leading-relaxed">
+                    {product.description}
+                  </p>
+
+                  {product.subTags && (
+                    <div className="flex flex-wrap gap-2 mb-8">
+                      {product.subTags.map(tag => (
+                        <span key={tag} className="px-3 py-1.5 bg-gray-50 border border-gray-100 text-gray-600 text-xs font-medium rounded-lg">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="flex flex-wrap gap-2 mt-auto pt-6 border-t border-gray-50">
+                    {(() => {
+                      const displayActions: string[] = [];
+
+                      if (product.demoPlatforms && product.demoPlatforms.length > 0) {
+                        displayActions.push('演示地址');
+                      } else if (product.actions?.includes('演示地址')) {
+                        displayActions.push('演示地址');
+                      }
+
+                      if ((product.manuals && product.manuals.length > 0) || (product.videos && product.videos.length > 0)) {
+                        displayActions.push('操作手册');
+                      } else if (product.actions?.includes('操作手册')) {
+                        displayActions.push('操作手册');
+                      }
+
+                      product.actions?.forEach(action => {
+                        if (action !== '演示地址' && action !== '操作手册' && !displayActions.includes(action)) {
+                          displayActions.push(action);
+                        }
+                      });
+
+                      return displayActions.map((action, i) => {
+                        const link = product.actionLinks?.[action];
+                        const isManual = action === '操作手册';
+                        const isDemo = action === '演示地址';
+                        const isModalAction = isManual || isDemo;
+                        return (
+                          <a
+                            key={i}
+                            href={isModalAction ? '#' : (link || '#')}
+                            target={isModalAction ? undefined : (link ? "_blank" : undefined)}
+                            rel={isModalAction ? undefined : (link ? "noopener noreferrer" : undefined)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              if (isManual) {
+                                setActiveManualProduct(product);
+                              } else if (isDemo) {
+                                setActiveDemoProduct(product);
+                                setActiveDemoTab(0);
+                              } else if (link) {
+                                window.open(link, '_blank', 'noopener,noreferrer');
+                              }
+                            }}
+                            className="inline-flex items-center px-3 py-1.5 border border-gray-200 rounded-lg text-[13px] font-medium text-gray-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all duration-200"
+                          >
+                            <ActionIcon name={action} className="w-3.5 h-3.5 mr-1.5" />
+                            {action}
+                          </a>
+                        );
+                      });
+                    })()}
                   </div>
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{cap.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{cap.description}</p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Scenarios Section */}
-      <div id="scenarios" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 tracking-tight">行业应用场景</h2>
-            <p className="text-gray-500 text-lg max-w-2xl">各行各业都在使用我们的低代码平台加速数字化创新。</p>
-          </div>
-          <button onClick={() => setCurrentPage('cases')} className="inline-flex items-center text-blue-600 font-medium hover:text-blue-700 transition-colors">
-            查看更多案例 <ChevronRight className="w-4 h-4 ml-1" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {casesData.slice(0, 3).map((scenario, index) => (
-            <div 
-              key={index} 
-              onClick={() => {
-                setActiveSolutionId(scenario.id);
-                setCurrentPage('solution');
-                window.scrollTo(0, 0);
-              }}
-              className="group rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300"
-            >
-              <div className={`h-48 bg-gradient-to-br ${scenario.gradient} p-6 flex flex-col justify-between relative overflow-hidden`}>
-                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300"></div>
-                <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
-                <span className="relative z-10 inline-flex px-3 py-1 bg-white/20 backdrop-blur-md text-white text-xs font-medium rounded-full w-fit border border-white/20">
-                  {scenario.tag}
-                </span>
-                <h3 className="relative z-10 text-2xl font-bold text-white mt-auto">
-                  {scenario.title}
-                </h3>
+          {/* Core Capabilities Section */}
+          <div id="capabilities" className="bg-white border-y border-gray-100 py-24">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-16">
+                <h2 className="text-3xl font-bold text-gray-900 mb-4 tracking-tight">坚实的底层服务引擎</h2>
+                <p className="text-gray-500 text-lg max-w-2xl mx-auto">不仅是前端 UI 的拖拽，我们提供完整的后端逻辑、数据与权限的低代码配置能力。</p>
               </div>
-              <div className="bg-white p-5 border border-t-0 border-gray-100 rounded-b-2xl flex justify-between items-center">
-                <span className="text-sm text-gray-500 font-medium">了解解决方案</span>
-                <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                  <ChevronRight className="w-4 h-4" />
-                </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {capabilitiesData.map((cap, index) => (
+                  <div key={index} className="flex p-6 rounded-2xl hover:bg-gray-50 transition-colors duration-300 border border-transparent hover:border-gray-100">
+                    <div className="flex-shrink-0 mr-6">
+                      <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                        <cap.icon className="w-7 h-7" />
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">{cap.title}</h3>
+                      <p className="text-gray-600 leading-relaxed">{cap.description}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-      </>
+          </div>
+
+          {/* Scenarios Section */}
+          <div id="scenarios" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-4 tracking-tight">行业应用场景</h2>
+                <p className="text-gray-500 text-lg max-w-2xl">各行各业都在使用我们的低代码平台加速数字化创新。</p>
+              </div>
+              <button onClick={() => setCurrentPage('cases')} className="inline-flex items-center text-blue-600 font-medium hover:text-blue-700 transition-colors">
+                查看更多案例 <ChevronRight className="w-4 h-4 ml-1" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {casesData.slice(0, 3).map((scenario, index) => (
+                <div
+                  key={index}
+                  onClick={() => {
+                    setActiveSolutionId(scenario.id);
+                    setCurrentPage('solution');
+                    window.scrollTo(0, 0);
+                  }}
+                  className="group rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300"
+                >
+                  <div className={`h-48 bg-gradient-to-br ${scenario.gradient} p-6 flex flex-col justify-between relative overflow-hidden`}>
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300"></div>
+                    <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                    <span className="relative z-10 inline-flex px-3 py-1 bg-white/20 backdrop-blur-md text-white text-xs font-medium rounded-full w-fit border border-white/20">
+                      {scenario.tag}
+                    </span>
+                    <h3 className="relative z-10 text-2xl font-bold text-white mt-auto">
+                      {scenario.title}
+                    </h3>
+                  </div>
+                  <div className="bg-white p-5 border border-t-0 border-gray-100 rounded-b-2xl flex justify-between items-center">
+                    <span className="text-sm text-gray-500 font-medium">了解解决方案</span>
+                    <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                      <ChevronRight className="w-4 h-4" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
       ) : currentPage === 'cases' ? (
         <div className="pt-32 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen animate-in fade-in duration-500">
           <div className="mb-10">
@@ -623,14 +626,13 @@ export default function App() {
           {/* Filters */}
           <div className="flex flex-wrap gap-3 mb-12">
             {categories.map(cat => (
-              <button 
+              <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                  activeCategory === cat 
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20 scale-105' 
-                    : 'bg-white text-gray-600 border border-gray-200 hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50'
-                }`}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${activeCategory === cat
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20 scale-105'
+                  : 'bg-white text-gray-600 border border-gray-200 hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50'
+                  }`}
               >
                 {cat}
               </button>
@@ -640,8 +642,8 @@ export default function App() {
           {/* Cases Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredCases.map((scenario, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 onClick={() => {
                   setActiveSolutionId(scenario.id);
                   setCurrentPage('solution');
@@ -681,7 +683,7 @@ export default function App() {
               </div>
             ))}
           </div>
-          
+
           {filteredCases.length === 0 && (
             <div className="py-20 text-center">
               <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -703,7 +705,7 @@ export default function App() {
                   <button onClick={() => setCurrentPage('cases')} className="inline-flex items-center text-gray-500 hover:text-blue-600 mb-8 transition-colors font-medium text-sm">
                     <ArrowLeft className="w-4 h-4 mr-2" /> 返回案例列表
                   </button>
-                  
+
                   <div className={`rounded-3xl bg-gradient-to-br ${activeSolutionData.gradient} p-10 md:p-16 relative overflow-hidden shadow-lg mb-12`}>
                     <div className="absolute inset-0 bg-black/10"></div>
                     <div className="absolute -right-20 -top-20 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
@@ -841,19 +843,19 @@ export default function App() {
             </div>
             <div className="flex-1 py-4">
               <nav className="space-y-1 px-3">
-                <button 
+                <button
                   onClick={() => setConsoleTab('products')}
                   className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${consoleTab === 'products' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'}`}
                 >
                   <Box className="w-4 h-4 mr-3" /> 产品矩阵管理
                 </button>
-                <button 
+                <button
                   onClick={() => setConsoleTab('capabilities')}
                   className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${consoleTab === 'capabilities' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'}`}
                 >
                   <Cpu className="w-4 h-4 mr-3" /> 底层引擎管理
                 </button>
-                <button 
+                <button
                   onClick={() => setConsoleTab('cases')}
                   className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${consoleTab === 'cases' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'}`}
                 >
@@ -870,7 +872,7 @@ export default function App() {
                 <h3 className="text-lg font-bold text-gray-900">
                   {consoleTab === 'products' ? '产品矩阵数据' : consoleTab === 'capabilities' ? '底层引擎数据' : '行业案例数据'}
                 </h3>
-                <button 
+                <button
                   onClick={() => {
                     const newItem: any = { _type: consoleTab, _isNew: true };
                     if (consoleTab === 'products') {
@@ -927,13 +929,13 @@ export default function App() {
                           </td>
                         )}
                         <td className="px-6 py-4 text-right whitespace-nowrap">
-                          <button 
+                          <button
                             onClick={() => setEditingItem({ ...item, _index: idx, _type: consoleTab })}
                             className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium mr-4"
                           >
                             <Edit2 className="w-4 h-4 mr-1" /> 编辑
                           </button>
-                          <button 
+                          <button
                             onClick={() => setItemToDelete({ index: idx, type: consoleTab })}
                             className="inline-flex items-center text-red-600 hover:text-red-800 font-medium"
                           >
@@ -963,23 +965,23 @@ export default function App() {
             <div className="p-6 overflow-y-auto flex-1 space-y-5">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">标题</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={editingItem.title || ''}
-                  onChange={(e) => setEditingItem({...editingItem, title: e.target.value})}
+                  onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
                   className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">描述</label>
-                <textarea 
+                <textarea
                   rows={4}
                   value={editingItem.description || editingItem.desc || ''}
                   onChange={(e) => {
                     if (editingItem._type === 'products' || editingItem._type === 'capabilities') {
-                      setEditingItem({...editingItem, description: e.target.value});
+                      setEditingItem({ ...editingItem, description: e.target.value });
                     } else {
-                      setEditingItem({...editingItem, desc: e.target.value});
+                      setEditingItem({ ...editingItem, desc: e.target.value });
                     }
                   }}
                   className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none resize-none"
@@ -996,8 +998,8 @@ export default function App() {
                       {['产品履历', '白皮书', '开发指南'].map(actionName => (
                         <div key={actionName}>
                           <label className="block text-sm font-medium text-gray-700 mb-1.5">{actionName}</label>
-                          <input 
-                            type="text" 
+                          <input
+                            type="text"
                             value={editingItem.actionLinks?.[actionName] || ''}
                             onChange={(e) => {
                               const val = e.target.value;
@@ -1005,14 +1007,14 @@ export default function App() {
                                 ...(editingItem.actionLinks || {}),
                                 [actionName]: val
                               };
-                              
+
                               let newActions = [...(editingItem.actions || [])];
                               if (val && !newActions.includes(actionName)) {
                                 newActions.push(actionName);
                               } else if (!val && newActions.includes(actionName)) {
                                 newActions = newActions.filter(a => a !== actionName);
                               }
-                              
+
                               setEditingItem({
                                 ...editingItem,
                                 actionLinks: newLinks,
@@ -1035,7 +1037,7 @@ export default function App() {
                     <div className="p-4 bg-white border-t border-gray-200 space-y-6">
                       <div className="flex items-center justify-between mb-3">
                         <label className="block text-sm font-medium text-gray-700">演示平台列表</label>
-                        <button 
+                        <button
                           onClick={() => {
                             const newPlatforms = [...(editingItem.demoPlatforms || []), { name: '', url: '', accounts: [] }];
                             setEditingItem({ ...editingItem, demoPlatforms: newPlatforms });
@@ -1045,11 +1047,11 @@ export default function App() {
                           <Plus className="w-3 h-3 mr-1" /> 添加平台
                         </button>
                       </div>
-                      
+
                       <div className="space-y-4">
                         {(editingItem.demoPlatforms || []).map((platform: any, pIdx: number) => (
                           <div key={pIdx} className="bg-gray-50 rounded-xl border border-gray-200 p-4 relative">
-                            <button 
+                            <button
                               onClick={() => {
                                 const newPlatforms = [...editingItem.demoPlatforms];
                                 newPlatforms.splice(pIdx, 1);
@@ -1059,11 +1061,11 @@ export default function App() {
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
-                            
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 pr-10">
                               <div>
                                 <label className="block text-xs font-medium text-gray-500 mb-1">平台名称</label>
-                                <input 
+                                <input
                                   type="text" placeholder="例如：中心端" value={platform.name}
                                   onChange={(e) => {
                                     const newPlatforms = [...editingItem.demoPlatforms];
@@ -1075,7 +1077,7 @@ export default function App() {
                               </div>
                               <div>
                                 <label className="block text-xs font-medium text-gray-500 mb-1">系统地址</label>
-                                <input 
+                                <input
                                   type="text" placeholder="http://" value={platform.url}
                                   onChange={(e) => {
                                     const newPlatforms = [...editingItem.demoPlatforms];
@@ -1090,7 +1092,7 @@ export default function App() {
                             <div className="border-t border-gray-200 pt-4">
                               <div className="flex items-center justify-between mb-3">
                                 <label className="block text-xs font-medium text-gray-700">测试账号</label>
-                                <button 
+                                <button
                                   onClick={() => {
                                     const newPlatforms = [...editingItem.demoPlatforms];
                                     newPlatforms[pIdx].accounts = [...(newPlatforms[pIdx].accounts || []), { role: '', username: '', password: '' }];
@@ -1101,12 +1103,12 @@ export default function App() {
                                   <Plus className="w-3 h-3 mr-1" /> 添加账号
                                 </button>
                               </div>
-                              
+
                               <div className="space-y-2">
                                 {(platform.accounts || []).map((account: any, aIdx: number) => (
                                   <div key={aIdx} className="flex items-start gap-2 bg-white p-2 rounded-lg border border-gray-100">
                                     <div className="grid grid-cols-3 gap-2 flex-1">
-                                      <input 
+                                      <input
                                         type="text" placeholder="角色 (如: 代理机构)" value={account.role}
                                         onChange={(e) => {
                                           const newPlatforms = [...editingItem.demoPlatforms];
@@ -1115,7 +1117,7 @@ export default function App() {
                                         }}
                                         className="w-full px-2 py-1 text-xs bg-gray-50 border border-gray-200 rounded focus:ring-1 focus:ring-blue-500 outline-none"
                                       />
-                                      <input 
+                                      <input
                                         type="text" placeholder="用户名" value={account.username}
                                         onChange={(e) => {
                                           const newPlatforms = [...editingItem.demoPlatforms];
@@ -1124,7 +1126,7 @@ export default function App() {
                                         }}
                                         className="w-full px-2 py-1 text-xs bg-gray-50 border border-gray-200 rounded focus:ring-1 focus:ring-blue-500 outline-none"
                                       />
-                                      <input 
+                                      <input
                                         type="text" placeholder="密码" value={account.password}
                                         onChange={(e) => {
                                           const newPlatforms = [...editingItem.demoPlatforms];
@@ -1134,7 +1136,7 @@ export default function App() {
                                         className="w-full px-2 py-1 text-xs bg-gray-50 border border-gray-200 rounded focus:ring-1 focus:ring-blue-500 outline-none"
                                       />
                                     </div>
-                                    <button 
+                                    <button
                                       onClick={() => {
                                         const newPlatforms = [...editingItem.demoPlatforms];
                                         newPlatforms[pIdx].accounts.splice(aIdx, 1);
@@ -1166,7 +1168,7 @@ export default function App() {
                       <div>
                         <div className="flex items-center justify-between mb-3">
                           <label className="block text-sm font-medium text-gray-700">操作手册列表</label>
-                          <button 
+                          <button
                             onClick={() => {
                               const newManuals = [...(editingItem.manuals || []), { title: '', date: new Date().toISOString().split('T')[0], link: '' }];
                               setEditingItem({ ...editingItem, manuals: newManuals });
@@ -1180,7 +1182,7 @@ export default function App() {
                           {(editingItem.manuals || []).map((manual: any, idx: number) => (
                             <div key={idx} className="flex items-start gap-2 bg-gray-50 p-3 rounded-lg border border-gray-100">
                               <div className="flex-1 space-y-2">
-                                <input 
+                                <input
                                   type="text" placeholder="手册名称" value={manual.title}
                                   onChange={(e) => {
                                     const newManuals = [...editingItem.manuals];
@@ -1190,7 +1192,7 @@ export default function App() {
                                   className="w-full px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 outline-none"
                                 />
                                 <div className="flex gap-2">
-                                  <input 
+                                  <input
                                     type="date" value={manual.date}
                                     onChange={(e) => {
                                       const newManuals = [...editingItem.manuals];
@@ -1199,7 +1201,7 @@ export default function App() {
                                     }}
                                     className="w-1/3 px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 outline-none"
                                   />
-                                  <input 
+                                  <input
                                     type="text" placeholder="下载/查看链接" value={manual.link}
                                     onChange={(e) => {
                                       const newManuals = [...editingItem.manuals];
@@ -1210,7 +1212,7 @@ export default function App() {
                                   />
                                 </div>
                               </div>
-                              <button 
+                              <button
                                 onClick={() => {
                                   const newManuals = [...editingItem.manuals];
                                   newManuals.splice(idx, 1);
@@ -1230,7 +1232,7 @@ export default function App() {
                       <div>
                         <div className="flex items-center justify-between mb-3">
                           <label className="block text-sm font-medium text-gray-700">操作视频列表</label>
-                          <button 
+                          <button
                             onClick={() => {
                               const newVideos = [...(editingItem.videos || []), { title: '', date: new Date().toISOString().split('T')[0], link: '' }];
                               setEditingItem({ ...editingItem, videos: newVideos });
@@ -1244,7 +1246,7 @@ export default function App() {
                           {(editingItem.videos || []).map((video: any, idx: number) => (
                             <div key={idx} className="flex items-start gap-2 bg-gray-50 p-3 rounded-lg border border-gray-100">
                               <div className="flex-1 space-y-2">
-                                <input 
+                                <input
                                   type="text" placeholder="视频名称" value={video.title}
                                   onChange={(e) => {
                                     const newVideos = [...editingItem.videos];
@@ -1254,7 +1256,7 @@ export default function App() {
                                   className="w-full px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 outline-none"
                                 />
                                 <div className="flex gap-2">
-                                  <input 
+                                  <input
                                     type="date" value={video.date}
                                     onChange={(e) => {
                                       const newVideos = [...editingItem.videos];
@@ -1263,7 +1265,7 @@ export default function App() {
                                     }}
                                     className="w-1/3 px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 outline-none"
                                   />
-                                  <input 
+                                  <input
                                     type="text" placeholder="观看链接" value={video.link}
                                     onChange={(e) => {
                                       const newVideos = [...editingItem.videos];
@@ -1274,7 +1276,7 @@ export default function App() {
                                   />
                                 </div>
                               </div>
-                              <button 
+                              <button
                                 onClick={() => {
                                   const newVideos = [...editingItem.videos];
                                   newVideos.splice(idx, 1);
@@ -1294,20 +1296,20 @@ export default function App() {
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1.5">产品版本号</label>
-                          <input 
-                            type="text" 
+                          <input
+                            type="text"
                             value={editingItem.version || ''}
-                            onChange={(e) => setEditingItem({...editingItem, version: e.target.value})}
+                            onChange={(e) => setEditingItem({ ...editingItem, version: e.target.value })}
                             placeholder="例如：8.0.50.30"
                             className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 outline-none"
                           />
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1.5">联系人</label>
-                          <input 
-                            type="text" 
+                          <input
+                            type="text"
                             value={editingItem.contact || ''}
-                            onChange={(e) => setEditingItem({...editingItem, contact: e.target.value})}
+                            onChange={(e) => setEditingItem({ ...editingItem, contact: e.target.value })}
                             placeholder="例如：张琳瑶"
                             className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 outline-none"
                           />
@@ -1321,19 +1323,19 @@ export default function App() {
                 <>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">行业分类</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       value={editingItem.industry || ''}
-                      onChange={(e) => setEditingItem({...editingItem, industry: e.target.value})}
+                      onChange={(e) => setEditingItem({ ...editingItem, industry: e.target.value })}
                       className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">关键指标</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       value={editingItem.metrics || ''}
-                      onChange={(e) => setEditingItem({...editingItem, metrics: e.target.value})}
+                      onChange={(e) => setEditingItem({ ...editingItem, metrics: e.target.value })}
                       className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
                     />
                   </div>
@@ -1341,13 +1343,13 @@ export default function App() {
               )}
             </div>
             <div className="p-6 border-t border-gray-100 bg-gray-50/50 flex justify-end gap-3">
-              <button 
+              <button
                 onClick={() => setEditingItem(null)}
                 className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
               >
                 取消
               </button>
-              <button 
+              <button
                 onClick={() => {
                   if (editingItem._type === 'products') {
                     const newData = [...productsData];
@@ -1399,13 +1401,13 @@ export default function App() {
               <p className="text-gray-600">您确定要删除这条记录吗？此操作无法撤销。</p>
             </div>
             <div className="p-6 border-t border-gray-100 bg-gray-50/50 flex justify-end gap-3">
-              <button 
+              <button
                 onClick={() => setItemToDelete(null)}
                 className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
               >
                 取消
               </button>
-              <button 
+              <button
                 onClick={() => {
                   if (itemToDelete.type === 'products') {
                     const newData = [...productsData];
@@ -1450,7 +1452,7 @@ export default function App() {
                 <a href="#" className="text-gray-400 hover:text-white transition-colors"><Twitter className="w-5 h-5" /></a>
               </div>
             </div>
-            
+
             <div>
               <h4 className="text-white font-semibold mb-6">产品矩阵</h4>
               <ul className="space-y-4 text-sm">
@@ -1480,7 +1482,7 @@ export default function App() {
               </ul>
             </div>
           </div>
-          
+
           <div className="pt-8 border-t border-gray-800 text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center gap-4">
             <p>© 2026 LowCode Pro. All rights reserved.</p>
             <div className="flex gap-6">
@@ -1494,11 +1496,11 @@ export default function App() {
       {/* Floating Sidebar */}
       <div className="fixed right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4">
         {/* Online Consultation */}
-        <div className="bg-white rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] py-3 px-2 flex flex-col items-center gap-1.5 cursor-pointer hover:shadow-[0_12px_40px_rgb(0,0,0,0.12)] transition-all duration-300 group">
+        <div onClick={() => setIsChatOpen(true)} className="bg-white rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] py-3 px-2 flex flex-col items-center gap-1.5 cursor-pointer hover:shadow-[0_12px_40px_rgb(0,0,0,0.12)] transition-all duration-300 group">
           <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center group-hover:scale-110 transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(59,130,246,0.4)]">
             <img src="https://oa.epoint.com.cn/h5/fileattaches/20260404/1775274283352_08dcce6f/s0f7g4.png" alt="Consultant" className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-300" />
           </div>
-          <span className="text-[13px] font-medium text-gray-700 group-hover:text-blue-600 leading-tight text-center transition-colors duration-300">在线<br/>咨询</span>
+          <span className="text-[13px] font-medium text-gray-700 group-hover:text-blue-600 leading-tight text-center transition-colors duration-300">在线<br />咨询</span>
         </div>
 
         {/* WeChat & After-sales */}
@@ -1509,8 +1511,8 @@ export default function App() {
               <MessageCircle className="w-6 h-6 text-blue-500" />
               <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full border border-white"></div>
             </div>
-            <span className="text-[13px] font-medium text-blue-600 leading-tight text-center">微信<br/>咨询</span>
-            
+            <span className="text-[13px] font-medium text-blue-600 leading-tight text-center">微信<br />咨询</span>
+
             {/* Hover Popup */}
             <div className="absolute right-full top-0 mr-4 w-[280px] bg-white rounded-2xl shadow-[0_20px_40px_rgb(0,0,0,0.1)] p-8 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-x-4 group-hover:translate-x-0 before:content-[''] before:absolute before:right-[-8px] before:top-8 before:w-4 before:h-4 before:bg-white before:rotate-45 before:shadow-[2px_-2px_2px_rgb(0,0,0,0.02)]">
               <div className="flex flex-col items-center text-center relative z-10">
@@ -1529,7 +1531,7 @@ export default function App() {
           {/* After-sales */}
           <div className="p-3 pt-4 flex flex-col items-center gap-1.5 cursor-pointer hover:bg-gray-50/80 transition-colors rounded-b-full group relative">
             <Headphones className="w-6 h-6 text-gray-700 group-hover:text-blue-600 transition-colors" />
-            <span className="text-[13px] font-medium text-gray-700 group-hover:text-blue-600 transition-colors leading-tight text-center">售后<br/>服务</span>
+            <span className="text-[13px] font-medium text-gray-700 group-hover:text-blue-600 transition-colors leading-tight text-center">售后<br />服务</span>
 
             {/* Hover Popup */}
             <div className="absolute right-full bottom-0 mr-4 w-[280px] bg-white rounded-2xl shadow-[0_20px_40px_rgb(0,0,0,0.1)] p-8 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-x-4 group-hover:translate-x-0 before:content-[''] before:absolute before:right-[-8px] before:bottom-8 before:w-4 before:h-4 before:bg-white before:rotate-45 before:shadow-[2px_-2px_2px_rgb(0,0,0,0.02)]">
@@ -1546,7 +1548,7 @@ export default function App() {
                   <ClipboardList className="w-5 h-5 text-gray-700 mt-1" />
                   <div>
                     <p className="text-[15px] text-gray-900 font-medium mb-1.5">工单服务</p>
-                    <p className="text-[14px] text-gray-500 leading-relaxed">获取专业支持，快速<br/>解决问题</p>
+                    <p className="text-[14px] text-gray-500 leading-relaxed">获取专业支持，快速<br />解决问题</p>
                   </div>
                 </div>
               </div>
@@ -1574,7 +1576,7 @@ export default function App() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
+
             {/* Content */}
             <div className="p-8 overflow-y-auto flex-1 bg-gray-50/30">
               {activeDemoProduct.demoPlatforms && activeDemoProduct.demoPlatforms.length > 0 ? (
@@ -1585,11 +1587,10 @@ export default function App() {
                       <button
                         key={idx}
                         onClick={() => setActiveDemoTab(idx)}
-                        className={`px-6 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
-                          activeDemoTab === idx
-                            ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                            : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:text-gray-900'
-                        }`}
+                        className={`px-6 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${activeDemoTab === idx
+                          ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                          : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:text-gray-900'
+                          }`}
                       >
                         {platform.name}
                       </button>
@@ -1606,18 +1607,18 @@ export default function App() {
                         </div>
                         <div className="flex-1 overflow-hidden">
                           <p className="text-xs text-gray-500 mb-1">系统地址</p>
-                          <a 
-                            href={activeDemoProduct.demoPlatforms[activeDemoTab].url} 
-                            target="_blank" 
+                          <a
+                            href={activeDemoProduct.demoPlatforms[activeDemoTab].url}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="text-sm font-medium text-blue-600 hover:text-blue-800 truncate block transition-colors"
                           >
                             {activeDemoProduct.demoPlatforms[activeDemoTab].url}
                           </a>
                         </div>
-                        <a 
-                          href={activeDemoProduct.demoPlatforms[activeDemoTab].url} 
-                          target="_blank" 
+                        <a
+                          href={activeDemoProduct.demoPlatforms[activeDemoTab].url}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="px-4 py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 flex-shrink-0"
                         >
@@ -1640,7 +1641,7 @@ export default function App() {
                                     <p className="text-xs text-gray-500 mb-1">用户名</p>
                                     <p className="text-sm font-medium text-gray-900 font-mono">{account.username}</p>
                                   </div>
-                                  <button 
+                                  <button
                                     onClick={() => navigator.clipboard.writeText(account.username)}
                                     className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-md opacity-0 group-hover:opacity-100 transition-all flex items-center gap-1 text-xs font-medium"
                                     title="复制用户名"
@@ -1654,7 +1655,7 @@ export default function App() {
                                     <p className="text-xs text-gray-500 mb-1">密码</p>
                                     <p className="text-sm font-medium text-gray-900 font-mono">{account.password}</p>
                                   </div>
-                                  <button 
+                                  <button
                                     onClick={() => navigator.clipboard.writeText(account.password)}
                                     className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-md opacity-0 group-hover:opacity-100 transition-all flex items-center gap-1 text-xs font-medium"
                                     title="复制密码"
@@ -1719,7 +1720,7 @@ export default function App() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
+
             {/* Content */}
             <div className="p-8 overflow-y-auto flex-1 bg-gray-50/30">
               {/* Manuals Section */}
@@ -1809,13 +1810,13 @@ export default function App() {
       {isFreeTrialModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-gray-100/90 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
           <div className="relative w-full max-w-5xl my-auto">
-            <button 
-              onClick={() => setIsFreeTrialModalOpen(false)} 
+            <button
+              onClick={() => setIsFreeTrialModalOpen(false)}
               className="absolute -top-12 right-0 p-2 text-gray-500 hover:text-gray-900 bg-white/50 hover:bg-white rounded-full transition-all"
             >
               <X className="w-6 h-6" />
             </button>
-            
+
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-blue-600">免费体验产品</h2>
             </div>
@@ -1824,7 +1825,7 @@ export default function App() {
               {/* Left Column - Form */}
               <div className="flex-1 p-8 md:p-10 border-b md:border-b-0 md:border-r border-gray-100">
                 <h3 className="text-xl font-bold text-gray-900 mb-6">请填写信息</h3>
-                
+
                 <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
@@ -1873,13 +1874,13 @@ export default function App() {
                   </div>
 
                   <div>
-                    <textarea 
-                      placeholder="需求描述" 
+                    <textarea
+                      placeholder="需求描述"
                       rows={4}
                       className="w-full px-4 py-3 bg-white border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-sm transition-all resize-none"
                     ></textarea>
                   </div>
-新点
+                  新点
                   <div className="space-y-3 pt-2">
                     <label className="flex items-start gap-2 cursor-pointer group">
                       <div className="relative flex items-center justify-center mt-0.5">
@@ -1908,7 +1909,7 @@ export default function App() {
               {/* Right Column - Info */}
               <div className="w-full md:w-[320px] p-8 md:p-10 bg-white flex flex-col">
                 <h3 className="text-xl font-bold text-gray-900 mb-6">已经注册？</h3>
-                
+
                 <button className="w-full py-2.5 bg-[#0084ff] text-white rounded-md text-sm font-medium hover:bg-blue-600 transition-colors shadow-sm shadow-blue-500/20 mb-10">
                   登录
                 </button>
@@ -1916,7 +1917,7 @@ export default function App() {
                 <div className="space-y-6 mt-auto">
                   <div className="text-sm text-gray-600 leading-relaxed">
                     您也可以<br />
-                    致电 <span className="text-[#0084ff] font-medium">4008-830-830</span>
+                    致电 <span className="text-[#0084ff] font-medium">18962289726</span>
                   </div>
 
                   <div className="text-sm text-gray-600 leading-relaxed">
@@ -1955,14 +1956,14 @@ export default function App() {
             <div className="p-6 space-y-4">
               <p className="text-gray-600 text-sm mb-4">欢迎与我们联系，探索新点低代码平台的无限商业可能。请通过以下方式获取专属商业解决方案：</p>
               <div className="flex items-center gap-4 p-4 bg-blue-50/50 rounded-xl border border-blue-100/50">
-                <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0"><Phone className="w-5 h-5"/></div>
+                <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0"><Phone className="w-5 h-5" /></div>
                 <div>
                   <div className="text-xs text-gray-500 mb-0.5">全国合作专线</div>
                   <div className="font-semibold text-gray-900">400-XXX-XXXX</div>
                 </div>
               </div>
               <div className="flex items-center gap-4 p-4 bg-green-50/50 rounded-xl border border-green-100/50">
-                <div className="w-10 h-10 bg-green-100 text-green-600 rounded-full flex items-center justify-center flex-shrink-0"><Mail className="w-5 h-5"/></div>
+                <div className="w-10 h-10 bg-green-100 text-green-600 rounded-full flex items-center justify-center flex-shrink-0"><Mail className="w-5 h-5" /></div>
                 <div>
                   <div className="text-xs text-gray-500 mb-0.5">商务洽谈邮箱</div>
                   <div className="font-semibold text-gray-900">business@epoint.com.cn</div>
@@ -2003,6 +2004,84 @@ export default function App() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Online Consultation Chat Window */}
+      {isChatOpen && (
+        <div className="fixed right-24 bottom-10 z-[100] w-[340px] h-[520px] bg-white rounded-t-xl rounded-b-lg shadow-2xl flex flex-col border border-gray-200 overflow-hidden animate-in slide-in-from-bottom-5 fade-in duration-300">
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-[#4ea2f6] to-[#127ef4] text-white shadow-sm border-b border-blue-500/20">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full overflow-hidden bg-white/20 border border-white/30">
+                <img src="https://oa.epoint.com.cn/h5/fileattaches/20260404/1775274283352_08dcce6f/s0f7g4.png" className="w-full h-full object-contain bg-white/90" alt="avatar" />
+              </div>
+              <span className="font-bold tracking-wide text-[15px] drop-shadow-sm">小新</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <Volume2 className="w-4 h-4 hover:text-white/80 cursor-pointer transition-colors" />
+              <Minus className="w-4 h-4 hover:text-white/80 cursor-pointer transition-colors" onClick={() => setIsChatOpen(false)} />
+              <X className="w-4 h-4 hover:text-white/80 cursor-pointer transition-colors" onClick={() => setIsChatOpen(false)} />
+            </div>
+          </div>
+
+          {/* Body */}
+          <div className="flex-1 overflow-y-auto bg-[#f6f7f9] p-4 flex flex-col gap-5 text-[13px] relative [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-black/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[::-webkit-scrollbar-thumb]:bg-black/20 [&::-webkit-scrollbar-track]:bg-transparent">
+            <div className="text-center text-[#8e959e] text-xs pb-3 border-b border-gray-200 mb-2">
+              点击查看历史记录
+            </div>
+
+            {/* Message 1 */}
+            <div>
+              <div className="text-[#aaa] text-xs mb-1.5 ml-1">12:52:10</div>
+              <div className="relative bg-white border border-gray-100 p-3 rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-gray-700 max-w-[85%] rounded-tl-sm ml-2.5 leading-relaxed">
+                <div className="absolute top-3 -left-[7px] w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[8px] border-r-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.05)]"></div>
+                尊敬的客户您好，请选择您要咨询的问题：
+              </div>
+            </div>
+
+            {/* Message 2 */}
+            <div>
+              <div className="relative bg-white border border-gray-100 p-3.5 rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-gray-700 max-w-[85%] rounded-tl-sm ml-2.5 leading-relaxed">
+                <div className="absolute top-3 -left-[7px] w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[8px] border-r-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.05)]"></div>
+                <div className="space-y-2.5 mb-3 text-[#2d88e6] font-medium">
+                  <div className="group"><span className="text-[#2d88e6] mr-1.5 opacity-80">1.</span><a href="#" className="underline decoration-[#2d88e6]/30 underline-offset-4 group-hover:decoration-[#2d88e6] group-hover:text-blue-600 transition-colors">产品购买咨询</a></div>
+                  <div className="group"><span className="text-[#2d88e6] mr-1.5 opacity-80">2.</span><a href="#" className="underline decoration-[#2d88e6]/30 underline-offset-4 group-hover:decoration-[#2d88e6] group-hover:text-blue-600 transition-colors">报表、可视化设计器售后咨询</a></div>
+                  <div className="group"><span className="text-[#2d88e6] mr-1.5 opacity-80">3.</span><a href="#" className="underline decoration-[#2d88e6]/30 underline-offset-4 group-hover:decoration-[#2d88e6] group-hover:text-blue-600 transition-colors">工作流审批售后咨询</a></div>
+                </div>
+                <div className="text-gray-900 text-[13px]">(直接回序号)</div>
+              </div>
+            </div>
+
+            {/* Message 3 */}
+            <div>
+              <div className="text-[#aaa] text-xs mb-1.5 ml-1">12:52:10</div>
+              <div className="relative bg-white border border-gray-100 p-3.5 rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-gray-700 max-w-[92%] rounded-tl-sm ml-2.5 leading-relaxed">
+                <div className="absolute top-3 -left-[7px] w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[8px] border-r-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.05)]"></div>
+                (回复对应数字获取专属服务，您也可以直接致电 <span className="font-semibold text-gray-800 tracking-wide">18962289726</span> 获取即时支持，或请点击<a href="#" className="text-[#2d88e6] underline decoration-[#2d88e6]/30 hover:decoration-[#2d88e6] hover:text-blue-600 underline-offset-4 transition-colors mx-1">https://support.qq.com/products</a>留言)
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="bg-white border-t border-gray-100 p-3 pb-4 shadow-[0_-4px_15px_rgba(0,0,0,0.02)] relative z-10">
+            <div className="flex justify-end mb-2 pr-1">
+              <a href="#" className="inline-flex items-center text-gray-500 hover:text-[#2d88e6] text-[13px]  tracking-wide font-medium transition-colors">
+                <User className="w-3.5 h-3.5 mr-1" /> 转人工服务
+              </a>
+            </div>
+            <div className="flex items-start gap-2 relative mt-2 px-1 group">
+              <Edit2 className="w-4 h-4 text-gray-400 absolute left-3 top-2.5 transition-colors group-focus-within:text-blue-500" />
+              <textarea
+                className="w-full pl-9 pr-20 py-2.5 text-[13px] bg-transparent outline-none resize-none placeholder:text-gray-400 leading-relaxed border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-4 focus:ring-blue-500/10 transition-all"
+                rows={2}
+                placeholder="请输入您的问题..."
+              ></textarea>
+              <button className="absolute right-2.5 bottom-2 bg-gradient-to-r from-[#2d88e6] to-[#1a73e8] text-white px-5 py-2 rounded-md shadow-sm shadow-blue-500/30 text-[13px] font-medium hover:shadow-blue-500/50 hover:-translate-y-0.5 transition-all active:scale-95">
+                发送
+              </button>
             </div>
           </div>
         </div>
