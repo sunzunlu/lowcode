@@ -1494,11 +1494,11 @@ export default function App() {
       {/* Floating Sidebar */}
       <div className="fixed right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4">
         {/* Online Consultation */}
-        <div className="bg-white rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] py-3 px-2 flex flex-col items-center gap-1.5 cursor-pointer hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all group">
-          <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-blue-500/20">
-            <img src="https://oa.epoint.com.cn/h5/fileattaches/20260404/1775274283352_08dcce6f/s0f7g4.png" alt="Consultant" className="w-full h-full object-cover" />
+        <div className="bg-white rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] py-3 px-2 flex flex-col items-center gap-1.5 cursor-pointer hover:shadow-[0_12px_40px_rgb(0,0,0,0.12)] transition-all duration-300 group">
+          <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center group-hover:scale-110 transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(59,130,246,0.4)]">
+            <img src="https://oa.epoint.com.cn/h5/fileattaches/20260404/1775274283352_08dcce6f/s0f7g4.png" alt="Consultant" className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-300" />
           </div>
-          <span className="text-[13px] font-medium text-gray-700 group-hover:text-blue-600 leading-tight text-center">在线<br/>咨询</span>
+          <span className="text-[13px] font-medium text-gray-700 group-hover:text-blue-600 leading-tight text-center transition-colors duration-300">在线<br/>咨询</span>
         </div>
 
         {/* WeChat & After-sales */}
