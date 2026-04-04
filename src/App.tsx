@@ -46,7 +46,9 @@ import {
   Headphones,
   ClipboardList,
   Volume2,
-  Minus
+  Minus,
+  PieChart,
+  LogIn
 } from 'lucide-react';
 
 const products = [
@@ -135,13 +137,23 @@ const products = [
     }
   },
   {
-    id: "others",
-    title: "其他专项设计器",
-    icon: Blocks,
-    iconColor: "text-pink-600",
-    iconBg: "bg-pink-50",
-    description: "覆盖更多垂直场景的专项设计工具，包括登录页面、指标卡片与报表等快速搭建工具。",
-    subTags: ["登录设计器", "指标卡片设计器", "报表设计器"],
+    id: "indicator-card",
+    title: "指标卡片设计器",
+    icon: PieChart,
+    iconColor: "text-amber-600",
+    iconBg: "bg-amber-50",
+    description: "专为业务数据展示打造的设计工具，提供丰富的图表组件与灵活展现形式，随时快速排版或搭建高规格的指标卡片。",
+    subTags: ["数据看板", "可视化图表", "动态指标展现"],
+    actions: ["演示地址", "操作手册", "产品履历", "白皮书", "开发指南"]
+  },
+  {
+    id: "login-designer",
+    title: "登录设计器",
+    icon: LogIn,
+    iconColor: "text-rose-600",
+    iconBg: "bg-rose-50",
+    description: "专注登录场景的可视化搭建设施，内置多种精美高转化登录模板，支持通过简单拖拽修改背景并无缝接入内部认证。",
+    subTags: ["精美模板", "样式灵活定做", "统一安全认证"],
     actions: ["演示地址", "操作手册", "产品履历", "白皮书", "开发指南"]
   }
 ];
@@ -1990,10 +2002,11 @@ export default function App() {
               <p className="text-gray-600 text-sm mb-6">如在使用过程中遇到技术问题，或需要产品相关的深入交流，欢迎联系我们的产品负责人：</p>
               <div className="space-y-3">
                 {[
-                  { product: '大屏/中屏设计器', name: '张经理', desc: '负责可视化大屏、中屏看板产品线' },
-                  { product: '小屏设计器', name: '李经理', desc: '负责移动端、多端适配产品线' },
-                  { product: '表单设计器', name: '王经理', desc: '负责动态表单、数据流转产品线' },
-                  { product: '底层引擎与集成', name: '赵经理', desc: '负责工作流、API网关及底层架构' },
+                  { product: '大屏设计器', name: '孙尊路', desc: '负责可视化大屏看板产品线' },
+                  { product: '中屏设计器', name: '孙尊路', desc: '负责可视化中屏看板产品线' },
+                  { product: '小屏设计器', name: '孙尊路', desc: '负责移动端、多端适配产品线' },
+                  { product: '表单设计器', name: '赵晨阳', desc: '负责动态表单、数据流转产品线' },
+                  { product: '底层引擎与集成', name: '杨杰', desc: '负责工作流、API网关及底层架构' },
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-start justify-between p-4 border border-gray-100 rounded-xl hover:border-blue-200 hover:bg-blue-50/50 transition-colors group">
                     <div>
