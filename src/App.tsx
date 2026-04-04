@@ -1471,9 +1471,9 @@ export default function App() {
             <div>
               <h4 className="text-white font-semibold mb-6">产品矩阵</h4>
               <ul className="space-y-4 text-sm">
-                <li><a href="#" className="hover:text-white transition-colors">大屏设计器</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">中屏设计器</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">小屏设计器</a></li>
+                <li><a href="http://192.168.219.54/docs/product/bigscreen/" className="hover:text-white transition-colors">大屏设计器</a></li>
+                <li><a href="http://192.168.219.54/docs/product/middlescreen/" className="hover:text-white transition-colors">中屏设计器</a></li>
+                <li><a href="http://192.168.219.54/docs/product/smallscreen/" className="hover:text-white transition-colors">小屏设计器</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">表单设计器</a></li>
               </ul>
             </div>
@@ -1481,9 +1481,9 @@ export default function App() {
             <div>
               <h4 className="text-white font-semibold mb-6">开发者资源</h4>
               <ul className="space-y-4 text-sm">
-                <li><a href="#" className="hover:text-white transition-colors">开发指南</a></li>
+                <li><a href="https://app.epoint.com.cn/h5/ecode/#/docdetail/development/a1-b1-c1-g1bP" className="hover:text-white transition-colors">开发指南</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">API 文档</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">组件物料库</a></li>
+                <li><a href="https://app.epoint.com.cn/h5/sdoc/dist/index.html#/homepage?menuLevel=0" className="hover:text-white transition-colors">组件物料库</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">更新日志</a></li>
               </ul>
             </div>
