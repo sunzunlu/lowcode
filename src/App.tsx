@@ -354,7 +354,10 @@ export default function App() {
           </div>
           <div className="flex items-center gap-4">
             <button
-              onClick={() => setCurrentPage('console')}
+              onClick={() => {
+                setCurrentPage('console');
+                window.scrollTo(0, 0);
+              }}
               className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block"
             >
               登录控制台
